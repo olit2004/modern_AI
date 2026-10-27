@@ -1,0 +1,12 @@
+# Experiment Configuration: Version 3 (Solver-Verified Self-Improvement)
+condition: "v3_verified"
+num_rounds: 3
+examples_per_round: 500
+epochs_per_round: 5
+batch_size: 64
+learning_rate: 0.001
+acceptance_tolerance: 0.02
+temperature: 0.8
+seeds: [42, 123, 999]
+opponents: ["random", "heuristic", "minimax"]
+num_eval_games: 20

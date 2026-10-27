@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Data and SQLite Caches
+*.sqlite
+*.sqlite3
+*.db
+results/cache/
+
+# Experiment outputs & large model weights
+results/*
+!results/figures/
+!results/.gitkeep
+results/figures/*
+!results/figures/.gitkeep
+
+# Solver binaries & compiled objects
+src/solver/cpp/pons/*.o
+src/solver/cpp/pons/c4solver
+src/solver/cpp/pons/generator
+src/solver/cpp/pons/.depend
+src/solver/cpp/c4_solver
+
+# Opening books (large binary files downloaded via script)
+src/solver/cpp/pons/*.book
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+.pytest_cache/

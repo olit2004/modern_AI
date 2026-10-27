@@ -1,0 +1,13 @@
+{
+  "condition": "v3_verified",
+  "num_rounds": 1,
+  "examples_per_round": 20,
+  "epochs_per_round": 1,
+  "batch_size": 10,
+  "learning_rate": 0.001,
+  "acceptance_tolerance": 0.05,
+  "temperature": 0.8,
+  "seeds": [42],
+  "opponents": ["random", "heuristic"],
+  "num_eval_games": 2
+}
