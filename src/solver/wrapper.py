@@ -182,7 +182,16 @@ class Connect4Solver:
         return [out for out in outputs if out is not None]
 
     def _solve_with_cpp(self, boards: List[Connect4Board]) -> List[Tuple[Dict[int, int], Set[int]]]:
-        """Call Pascal Pons C++ solver binary over stdin/stdout."""
+        """Call Pascal Pons C++ solver binary over stdin/stdout in chunks to prevent subprocess timeouts."""
+        chunk_size = 200
+        all_results: List[Tuple[Dict[int, int], Set[int]]] = []
+        for start_idx in range(0, len(boards), chunk_size):
+            chunk = boards[start_idx:start_idx + chunk_size]
+            all_results.extend(self._solve_chunk_with_cpp(chunk))
+        return all_results
+
+    def _solve_chunk_with_cpp(self, boards: List[Connect4Board]) -> List[Tuple[Dict[int, int], Set[int]]]:
+        """Solve a chunk of positions with the C++ solver binary."""
         cmd = [str(SOLVER_BIN), "-a"]
         if BOOK_PATH.exists():
             cmd.extend(["-b", str(BOOK_PATH)])
@@ -196,6 +205,7 @@ class Connect4Solver:
             lines.append(move_str if move_str else " ")
 
         input_data = "\n".join(lines) + "\n"
+        timeout_sec = max(60, len(boards) * 2)
 
         try:
             proc = subprocess.Popen(
@@ -206,9 +216,9 @@ class Connect4Solver:
                 stderr=subprocess.PIPE,
                 text=True
             )
-            stdout, stderr = proc.communicate(input=input_data, timeout=120)
+            stdout, stderr = proc.communicate(input=input_data, timeout=timeout_sec)
             if proc.returncode != 0:
-                print(f"[Solver] C++ solver error: {stderr}, falling back to Python solver.")
+                print(f"[Solver] C++ solver error: {stderr.strip()}, falling back to Python solver for this chunk.")
                 return [self.fallback_solver.evaluate_board(b) for b in boards]
 
             results = []
@@ -241,5 +251,5 @@ class Connect4Solver:
                     results.append(self.fallback_solver.evaluate_board(b))
             return results
         except Exception as e:
-            print(f"[Solver] Subprocess execution failed: {e}. Falling back.")
+            print(f"[Solver] Subprocess chunk execution failed: {e}. Falling back to Python solver for this chunk.")
             return [self.fallback_solver.evaluate_board(b) for b in boards]
