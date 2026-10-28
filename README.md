@@ -125,10 +125,10 @@ To train or demo the Connect-4 self-improvement engine on a free Google Colab T4
 # Run tests
 !PYTHONPATH=. pytest tests/ -v
 
-# Launch experiment loop
-!python run_experiments.py --config configs/self_learning.yaml --out /content/results --clean --require_cpp
+# Launch comparative experiment loop: Verified (with Judge) vs Unverified (without Judge)
+!python run_experiments.py --config configs/self_learning.yaml --condition compare --out /content/results --clean --require_cpp --final
 
-# Run interactive demo & render charts
+# Run interactive demo & render comparative charts
 !python demo.py --results_dir /content/results --num_games 50
 from IPython.display import Image, display
 display(Image(filename="/content/results/figures/demo_progress.png"))

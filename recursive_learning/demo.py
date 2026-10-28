@@ -2,8 +2,9 @@
 Interactive Presentation Demo for Task 1: Verified Self-Improvement on Connect-4.
 Features:
 1. Summary table of accepted and rejected rounds (strict optimal & outcome-preserving agreement).
-2. Dual-curve progress chart of dev agreement (fastest-win vs outcome-preserving) and 100-game opponent win rates.
-3. Live Head-to-Head tournament: Round 3 vs Round 0 with randomized openings to prevent deterministic repetition.
+2. Dual-panel progress charts comparing Verified Self-Improvement (with Judge) vs Unverified Self-Play (without Judge),
+   benchmarked against Heuristic opponent play (with 'vs Random' excluded for focused competitive scale).
+3. Live Head-to-Head tournament: Round 3 vs Round 0 with randomized openings.
 4. The 'Convincing Moment': Rigorously identifies and explains true blunders vs suboptimal moves based on solver outcome values.
 """
 
@@ -62,7 +63,11 @@ def display_summary_table(experiment_log: List[Dict[str, Any]]):
 
     print("=" * 98 + "\n")
 
-def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path):
+def plot_progress_curves(
+    experiment_log: List[Dict[str, Any]],
+    output_path: Path,
+    unverified_log: Optional[List[Dict[str, Any]]] = None
+):
     if not HAS_MATPLOTLIB or len(experiment_log) < 2:
         return
 
@@ -70,33 +75,61 @@ def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path
     rounds = [entry["round"] for entry in experiment_log]
     strict_agreements = [entry.get("dev_agreement", 0.0) * 100 for entry in experiment_log]
     outcome_agreements = [entry.get("dev_outcome_agreement", entry.get("dev_agreement", 0.0)) * 100 for entry in experiment_log]
-    wr_random = [entry.get("win_rate_random", 0.0) * 100 for entry in experiment_log]
     wr_heuristic = [entry.get("win_rate_heuristic", 0.0) * 100 for entry in experiment_log]
     wr_minimax = [entry.get("win_rate_minimax", 0.0) * 100 for entry in experiment_log]
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5.5))
 
-    # Panel 1: Dev Agreement (Strict vs Outcome-Preserving)
-    ax1.plot(rounds, outcome_agreements, marker="s", color="#1f77b4", linewidth=2.5, linestyle="-", label="Outcome-Preserving Agreement (Win/Draw)")
-    ax1.plot(rounds, strict_agreements, marker="o", color="#2ca02c", linewidth=2.5, linestyle="--", label="Strict Optimal Agreement (Fastest Win)")
-    ax1.axhline(14.3, color="gray", linestyle=":", alpha=0.7, label="Random Guess Baseline (14.3%)")
-    ax1.set_title("Validation Agreement on Unseen Positions", fontsize=12, fontweight="bold")
+    # Panel 1: Dev Agreement (Verified vs Unverified & Baselines)
+    ax1.plot(rounds, outcome_agreements, marker="s", color="#1f77b4", linewidth=2.5, linestyle="-", label="Verified (Outcome Agreement)")
+    ax1.plot(rounds, strict_agreements, marker="o", color="#2ca02c", linewidth=2.5, linestyle="-", label="Verified (Strict Optimal)")
+
+    if unverified_log and len(unverified_log) >= 2:
+        u_rounds = [entry["round"] for entry in unverified_log]
+        u_strict = [entry.get("dev_agreement", 0.0) * 100 for entry in unverified_log]
+        u_outcome = [entry.get("dev_outcome_agreement", entry.get("dev_agreement", 0.0)) * 100 for entry in unverified_log]
+        ax1.plot(u_rounds, u_outcome, marker="^", color="#9467bd", linewidth=2.0, linestyle="--", label="Without Judge (Outcome Agreement)")
+        ax1.plot(u_rounds, u_strict, marker="x", color="#d62728", linewidth=2.0, linestyle="--", label="Without Judge (Strict Optimal)")
+
+    # Baseline references
+    r0 = experiment_log[0]
+    heu_strict = r0.get("baseline_heuristic_strict", 0.38) * 100
+    ax1.axhline(heu_strict, color="#ff7f0e", linestyle=":", alpha=0.8, label=f"Heuristic Baseline ({heu_strict:.1f}%)")
+    ax1.axhline(14.3, color="gray", linestyle=":", alpha=0.6, label="Random Guess (14.3%)")
+
+    ax1.set_title("Solver Agreement on Unseen Positions", fontsize=12, fontweight="bold")
     ax1.set_xlabel("Self-Improvement Round", fontsize=11)
-    ax1.set_ylabel("Solver Agreement (%)", fontsize=11)
+    ax1.set_ylabel("Agreement with Solver (%)", fontsize=11)
     ax1.set_xticks(rounds)
     ax1.grid(True, linestyle="--", alpha=0.6)
-    ax1.legend(loc="lower right")
+    ax1.legend(loc="lower right", fontsize=9)
 
-    # Panel 2: Win rates vs opponents (randomized openings)
-    ax2.plot(rounds, wr_random, marker="o", color="#2ca02c", linewidth=2, label="vs Random")
-    ax2.plot(rounds, wr_heuristic, marker="^", color="#ff7f0e", linewidth=2, label="vs Heuristic")
-    ax2.plot(rounds, wr_minimax, marker="d", color="#d62728", linewidth=2, label="vs Minimax (d=2)")
-    ax2.set_title("Win Rates (Randomized Openings, 100 Games)", fontsize=12, fontweight="bold")
+    # Panel 2: Competitive Win Rates (Random opponent removed to highlight competitive range)
+    ax2.plot(rounds, wr_heuristic, marker="^", color="#ff7f0e", linewidth=2.5, label="Verified vs Heuristic")
+    ax2.plot(rounds, wr_minimax, marker="d", color="#d62728", linewidth=2.5, label="Verified vs Minimax (d=2)")
+
+    if unverified_log and len(unverified_log) >= 2:
+        u_rounds = [entry["round"] for entry in unverified_log]
+        u_wr_heu = [entry.get("win_rate_heuristic", 0.0) * 100 for entry in unverified_log]
+        u_wr_mini = [entry.get("win_rate_minimax", 0.0) * 100 for entry in unverified_log]
+        ax2.plot(u_rounds, u_wr_heu, marker="^", color="#ffbb78", linewidth=2.0, linestyle="--", label="Without Judge vs Heuristic")
+        ax2.plot(u_rounds, u_wr_mini, marker="d", color="#ff9896", linewidth=2.0, linestyle="--", label="Without Judge vs Minimax")
+
+    # Set appropriate y-axis range for competitive play
+    all_wrs = wr_heuristic + wr_minimax
+    if unverified_log:
+        all_wrs += [e.get("win_rate_heuristic", 0.0) * 100 for e in unverified_log]
+        all_wrs += [e.get("win_rate_minimax", 0.0) * 100 for e in unverified_log]
+    y_min = max(0, min(all_wrs) - 10) if all_wrs else 0
+    y_max = min(100, max(all_wrs) + 15) if all_wrs else 80
+    ax2.set_ylim(y_min, y_max)
+
+    ax2.set_title("Competitive Win Rates (100 Games, Randomized Openings)", fontsize=12, fontweight="bold")
     ax2.set_xlabel("Self-Improvement Round", fontsize=11)
     ax2.set_ylabel("Win Rate (%)", fontsize=11)
     ax2.set_xticks(rounds)
     ax2.grid(True, linestyle="--", alpha=0.6)
-    ax2.legend(loc="lower right")
+    ax2.legend(loc="lower right", fontsize=9)
 
     plt.tight_layout()
     fig.savefig(output_path, dpi=200)
@@ -230,23 +263,37 @@ def main():
     args = parse_args()
     res_base = Path(args.results_dir)
 
-    # Locate experiment log
-    metrics_file = None
+    # Locate experiment log for Verified condition
+    verified_metrics = None
     for cand in [res_base / "verified_seed42" / "experiment_metrics.json",
                  res_base / "v3_verified_seed42" / "experiment_metrics.json",
                  res_base / "experiment_metrics.json"]:
         if cand.exists():
-            metrics_file = cand
+            verified_metrics = cand
             break
 
-    if metrics_file:
-        with open(metrics_file, "r", encoding="utf-8") as f:
+    # Locate unverified condition log (Learning without the judge)
+    unverified_log = None
+    for cand in [res_base / "v2_unverified_seed42" / "experiment_metrics.json",
+                 res_base / "unverified_seed42" / "experiment_metrics.json",
+                 res_base / "v2_unverified" / "experiment_metrics.json"]:
+        if cand.exists():
+            try:
+                with open(cand, "r", encoding="utf-8") as f:
+                    unverified_log = json.load(f)
+                print(f"[Demo] Found unverified (without judge) metrics: {cand}")
+            except Exception:
+                pass
+            break
+
+    if verified_metrics:
+        with open(verified_metrics, "r", encoding="utf-8") as f:
             log_data = json.load(f)
         display_summary_table(log_data)
         plot_path = Path(args.save_plot) if args.save_plot else (res_base / "figures" / "demo_progress.png")
-        plot_progress_curves(log_data, plot_path)
+        plot_progress_curves(log_data, plot_path, unverified_log=unverified_log)
     else:
-        print(f"No experiment_metrics.json found in {res_base}. Run training first.")
+        print(f"No verified experiment_metrics.json found in {res_base}. Run training first.")
 
     # Locate checkpoints
     r0_ckpt = None

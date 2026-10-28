@@ -27,7 +27,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Connect-4 Self-Improvement Experiment Runner")
     parser.add_argument("--config", type=str, default="configs/self_learning.yaml", help="Path to config YAML or JSON")
     parser.add_argument("--out", type=str, default=None, help="Output directory (auto-detected if None)")
-    parser.add_argument("--condition", type=str, default=None, choices=["verified", "v1_fixed", "v2_unverified", "v3_verified", "all"], help="Override condition")
+    parser.add_argument("--condition", type=str, default=None, choices=["verified", "v1_fixed", "v2_unverified", "v3_verified", "compare", "all"], help="Override condition (use 'compare' for verified vs unverified)")
     parser.add_argument("--seeds", type=int, nargs="+", default=None, help="Override list of random seeds")
     parser.add_argument("--data_dir", type=str, default="data", help="Directory for datasets")
     parser.add_argument("--prepare_data", action="store_true", help="Generate and split dataset if missing")
@@ -71,7 +71,14 @@ def main():
 
     # Load configuration
     cfg = load_config(args.config)
-    conditions = [args.condition] if args.condition and args.condition != "all" else ([cfg.get("condition", "v3_verified")] if args.condition != "all" else ["v1_fixed", "v2_unverified", "v3_verified"])
+    if args.condition == "compare":
+        conditions = ["v3_verified", "v2_unverified"]
+    elif args.condition == "all":
+        conditions = ["v1_fixed", "v2_unverified", "v3_verified"]
+    elif args.condition:
+        conditions = [args.condition]
+    else:
+        conditions = [cfg.get("condition", "v3_verified")]
     seeds = args.seeds or cfg.get("seeds", [42])
     num_rounds = cfg.get("num_rounds", 3)
     examples_per_round = cfg.get("examples_per_round", 500)
