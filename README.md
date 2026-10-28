@@ -9,7 +9,7 @@ This repository houses two self-contained research tracks investigating autonomo
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 .
@@ -35,7 +35,7 @@ This repository houses two self-contained research tracks investigating autonomo
 
 ---
 
-## 🕹️ Track 1: Verified Recursive Self-Improvement (`recursive_learning/`)
+##  Track 1: Verified Recursive Self-Improvement (`recursive_learning/`)
 
 ### Research Motivation
 Can a neural network autonomously self-improve through practice games without falling victim to self-referential policy collapse or catastrophic forgetting? In Connect-4—a strongly solved zero-sum game—we investigate how external solver verification prevents degradation and guides genuine capability gains.
@@ -75,7 +75,7 @@ python demo.py --results_dir results --num_games 50
 
 ---
 
-## 🇪🇹 Track 2: Amharic Capability Distillation (`Qwen_student/`)
+##  Track 2: Amharic Capability Distillation (`Qwen_student/`)
 
 ### Research Motivation
 Compact language models (~0.5B parameters) have minimal exposure to low-resource languages like Amharic (Ethiopic Ge'ez script) during pre-training. We distill instruction-following and generation capabilities from an advanced teacher model into a lightweight, deployable student.
@@ -103,7 +103,7 @@ Compact language models (~0.5B parameters) have minimal exposure to low-resource
 
 ---
 
-## 🚀 Running on Google Colab
+##  Running on Google Colab
 
 To train or demo the Connect-4 self-improvement engine on a free Google Colab T4/V100 GPU:
 
