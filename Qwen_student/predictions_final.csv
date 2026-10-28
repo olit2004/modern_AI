@@ -1,0 +1,297 @@
+eval_id,task,base_output,distilled_output,base_seconds,base_new_tokens,distilled_seconds,distilled_new_tokens,teacher_output
+E01,closed_book_knowledge,በመስከት መልክት ሁምንድን እና ክlest ካርጋይ ዝርጋይ የተሰባት ደረጃ የሚያየናይ የሚያደጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያጋጋ የሚያ,የ1960ች እንደሚያጠቀም ስርስተኛ መሰረት (የመጣል ማግባዊ ምክራዊ ፕሮጀክቶች) ይፈጥር ያላቸው። በአፍሪካ ሀገራት ተማይና በአንድ ጊዜ የነፃነት ባለቤት ሊሆኑ የቻሉት ለምንድን ነው። በአንድ ጊዜ የነፃነት ባለቤት ሊሆኑ የቻሉት ለምንድን ነው።,10.675411137999959,256,33.94586632399978,196,
+E02,closed_book_knowledge,የስምጥ ሸለቆ ሀይቆች በትናትና በዝናብ ውሃ ደረጃቸውን ጠብቀው የሚቆዩበትን ተፈጥሯዊ ሂደት አብራራ በዚህ በአማርኛ ዝልክል በግጠና ይህ የተገባቁሉ መሰረጡ በአማርኛ ዝልክል በግጠና ይህ የተገባቁሉ መሰረጡ በአማርኛ ዝልክል በግጠና ይህ የተገባቁሉ መሰረጡ በአማርኛ ዝልክል በግጠና ይህ የተገባቁሉ መሰረጡ በአማርኛ ዝ,የስምጥ ሸለቆ ሀይቆች በትናትና በዝናብ ውሃ ደረጃቸውን የተሰጠበት የማካል መግመር ያላቸውን ይገኙ ዘመራ የሚጣሉ የአባቢ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱታ የሚያዱ,9.767426197999953,256,25.233980399000302,256,
+E03,closed_book_knowledge,የፋሲለደስ ግንብ በየትኛዋ የኢትዮጵያ ታሪanca ሁይና እanzi ካርቃላች ዹrão ኣዕም ከተማ ውስጥ ይገኛል. ኢና እanzi ከመሰረጡ መሆነ ነው። ኮንበር እና እና እግርኛ ዝርቂቸው ከተማ ውስጥ ይገኛል. አራባች እና እና እግርኛ ዝርቂቸው ከተማ ውስጥ ይገኛል. አራባች እና እና እግርኛ ዝርቂቸው ከተማ ውስጥ ይገኛል. አራባ,የፋሲለደስ ስራት በመጠበቅ የኢትዮጵያ ታሪካዊ ከተማ ውስጥ መረጃ ያላቸው ዘርሮ ተግባቢ የሚከናሚታዎች የእምህርት ብቻ የተማ ነው። የአዲስ አድራ ባለ የኢትዮጵያ ታሪካዊ ከተማ ነው። በማይነት የኢትዮጵያ ታሪካዊ ከተማ ነው። በማይነት የኢትዮጵያ ታሪካዊ ከተማ ነው። በማይነት የኢትዮጵያ ታሪካዊ ከተማ ነው። በማይነት የኢትዮጵያ ታሪካዊ,9.6011173710001,256,25.619942761999937,256,
+E04,closed_book_knowledge,"የአፍሪካ ህብረት (AU) በዚህ ተመሰግነት ቀም እርሮች መንገባት በተገበር ባይማይ ነው። አይቀም በዚህ ተመሰግነት ቀም እርሮች መንገባት በተገበር ባይማይ ነው።
+
+1. ስራት አይቀም በዚህ ተመሰግነት ቀም እርሮች መንገባት በተገበር ባይማይ ነው:
+   - AU: ስራት አይቀም በዚህ ተመሰግነት ቀም እርሮች መንገባት በተገበር ባይማይ ነው.
+   - ስራት","In the year 2063, the United Arab Emirates has been recognized as a global leader in sustainable development and environmental protection.",8.839675224000075,256,2.606633562999832,28,
+E05,closed_book_knowledge,የአይፒ አድራሻ (IP Address) እና በMAC አድራሻ መካከል ያለውን የመሳሪያ መለያ ልዩነት አብራራ በዚህ ነገር ማግስተኛ የቁጥቀም ተጻሆነ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን ሳewe ስም ምን ሲላይ ስም ምን,የአይፒ አድራሻ (IP Address) እና በMAC አድራሻ ጤርሮች ነው። በማህረጡ የተሰባ ማስጥ ቀላቅ ዘመራ አዲስ ደግሞ ይገኙ የሚደረግ የተሰባ ምርቸው የተቀም አድራሻ የሚያዝና የሚያዱታዊ ስርቹ አድራሻ የሚያዘጋግ የተሰባ ሚቃ አድራሻ የሚያዝና የሚያዱታዊ ሲሆን አድራሻ የሚያዝና የሚያዱታዊ ሁሉ አድራሻ የሚያዝና የሚያዱታዊ ህዳ አድ,9.521292587000062,256,25.350275509999847,256,
+E06,closed_book_knowledge,አንድ ባይት (Byte) ስንት ቢት (Bits) እanzi አማርኛ ፕ Somali ጃን ፓን ፦ም ከ Oman ካር ከ ኮና ከ ኩንስ ነው. አንድ ባይት እanzi አማርኛ ፕ Somali ጃን ፓን ፦ም ከ Oman ካር ከ ኮና ከ ኩንስ ነው ከ Oman ካር ከ ኮና ከ ኩንስ ነው ከ Oman ካር ከ ኮና ከ ኩንስ ነው ከ Oman ካር ከ ኮና ከ ኩንስ ነው ከ Oman ካር ከ ኮና ከ ኩንስ ነው �,በአንድ ባይት (Byte) እና ቢት (Bits) የሚያገባር መጠበቅ ውስጥ ያለው። በአንድ ባይት ምግብ ጤኬ የተማ ነው። በአንድ ባይት ማዕች የተማ ነው። በአንድ ባይት ሲሆን የተማ ነው። በአንድ ባይት ሰላም የተማ ነው። በአንድ ባይት ሲሆን የተማ ነው። በአንድ ባይት ሲሆን የተማ ነው። በአንድ ባይት ሲሆን የተማ ነው። በአንድ ባይት ሲ,9.642478036000057,256,25.0762343209999,256,
+E07,closed_book_knowledge,የህዳሴ ዘመን (Renaissance) በሳይንስ ጃጻር መወfills ነው። ከምን ።ትዮጵያ ይሆን ዝርቁች ደግባር ዹለው አንድ የተገር በአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የአማርኛ የ,"The Renaissance is a period of significant cultural and intellectual development in Europe during the 15th to 17th centuries. It saw a revival of classical learning, with scholars rediscovering ancient texts and developing new literary forms.",9.164828056000033,256,4.278609136999876,47,
+E08,closed_book_knowledge,የግብፅ ፒራሚdictions ጃጻን እንዚህ ያለው አይም ኣይሆን ይመሰረት የተቀበሩበትና የተገነቡበት ሃይማኖታዊ ምክንያት ምንድን ነበር በአማርኛ እንደ ደባል በንደ እና መላይ የተገነቡበት ሁሉ ማን ሳኑል በንደ እና መላይ የተገነቡበት ሀሳና በንደ እና መላይ የተገነቡበት ሂደ በንደ እና መላይ የተገነቡበት ሄን ሲን ስን በንደ እና መላይ የ,የግብፅ ፒራሚዶች በጥንታዊ ነገስታት የተቀበሩበትና የተገነቡበት ሃይማኖታዊ ምክንያት መጻፍ ጥና ይመሰረጤት ያለ የተቀበሩበት የተገነቡበት ሰላም ማዕሮች የተገነቡበት ሀደ ስልከ የተቀበሩበት የተገነቡበት ሁሉ ነው። የአካባቢ ሲሆን የተቀበሩበት የተገነቡበት ሂሳሌ ማዕሮች የተቀበሩበት የተገነቡበት ሀደ ስልከ የተቀበሩበት የተገነቡበት ሀደ,9.547624413999984,256,25.023732494999877,256,
+E09,closed_book_knowledge,የዜግነት መብቶችና ግዴታዎች እንደ ማለት ከምን ነበር እንደ ሰፃፅፀፒፋች ክልሮ ኣይተጻጻ እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒፋች እንደ ሰፃፅፀፒ�,የዜግነት መብቶችና ግዴታዎች በዲሞክራሲያዊ ምንድ የሚከረጋገበት ዘመና የተለኛ ማምህርት ሲሆን ይሰባል የአብራራ ነው። ተደራItemAt የማይቀም ህዝጪ የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት የተለኛ ማምህርት �,9.782509332000018,256,24.827660085999923,256,
+E10,closed_book_knowledge,በመርሆነ ትማ መሰረተ ሁለም አቀፍ ንግድ ለሀገራት እድገት የሚያስገኛቸውን ሰዚህ በአለም አቀፍ ንግድ ለሀገራት እድገት የሚያስገኛቸውን ሰዚህ በአለም አቀፍ ንግድ ለafen እድገት የሚያስገኛቸውን ሰዚህ በአለም አቀፍ ንግድ ለafen እድገት የሚያስገኛቸውን ሰዚህ በአለም አቀፍ ንግድ ለafen እድገት የሚያስገኛቸውን ሰዚህ በአለም አቀፍ ንግድ,"In the past few years, the government has been working hard to improve public services and infrastructure.",9.990292547999843,256,1.837646642999971,20,
+E11,closed_book_knowledge,âyርት እና መጻል ጃፅፅፅ ሁን ፕታት ነው። ኮደ ኣላይ ካርነት ነው። ከምስቀው ኢፍሪያ ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስቀው ከምስ,የአመቱ የተለያዩ ሰብሎችን እና የተለያዩ ሰብሎች መጻፍ ያላል። የሚከው ግን ነው: በማፈራረቅ በሰርት ቀጥታ ስ፦ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ በማፈራረቅ በአስራ,9.107950043000073,256,25.06175637100023,256,
+E12,closed_book_knowledge,"የአንድ ሙሉ ክበብ ማዕዘን ድምር ስንት ዲግሪ ነው:
+
+1. በና ሁይ መልስ ጃጻች የተመሰረት ደለገሮች የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን ያደር ዹመር የተቀማቸው ቀን ያደር ዹመር የ",የአንድ ሙሉ (የአንድ በማህረት) እና የሚያጎች ምስተኛ ግልፍ መሰረት ያለው የሚከጥሮ ሚይም አደራ ደመዝገባዊ ህፃፃ የሚያሳታ ሳይም አቀጣም የሚያስጥ ሁዳክ ዘላት የሚያስጥ ሀዳክ ዘላት የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የሚያስጥ የ,9.765800850000005,256,25.1598475159999,256,
+E13,closed_book_knowledge,አማርኛ እና ሁልክል እና ካብ ስራም ነገር እና ኮበር እና ኩላል እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና እና ኮበር እና �,የጥም እንዲሁም ተሰራዊ ስልክ ቀላቅ የተማ ነው። በአካከበብ የሚያገኙ ሲሆን ያለ የሚያግኝ የሚያገኙ ህይት የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያገኙ የሚያ,9.762654053999995,256,25.501758046000305,256,
+E14,closed_book_knowledge,"I understand you've shared some information about a drama titled ""የ呔ር ጥበብ"" (Drama). Without more context or details, I can't provide specific information about the plot, characters, or any other aspects of this drama. However, I'd be happy to discuss general aspects of dramas if that would help clarify what you're looking for. If you have any questions about drama writing, acting, production techniques, or anything related to storytelling in general, feel free to ask!",የተዳደጋው ፕሮች የሚለዱ ዘላም ትልከ የተሰረ ማስፈልጋት ያለ የተገኙ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በማካታዊ የአትር ምግብ የተቀፍ ነው። በ,3.474377972999946,102,24.374479399999927,256,
+E15,closed_book_knowledge,"በመሰረት:
+
+1. ስም እና ክፍልዎች ዝን እና እና ኮይነት ደግዚአት ዹን የሚገኑውን የሚያዕህር የሚያዱን የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር የሚያዕህር �","In the past few years, the government has been working hard to improve public services and infrastructure.",9.748669007999979,256,2.5310922740000024,20,
+E16,instruction_following,በኢትዮጵያዊው ወጣት የተሰራው ተሽከርካሪ ምን ያህል ክበደት አለው እንደሚያደርግ ከመጠቀም የተሰራች ሲሆን ወደ ኋላ መሄድ እንድትችል ተደርጋ ተሻሽላ ተሰርታለች። እንደሚያደርግ ከመጠቀም የተሰራች ሲሆን ወደ ኋላ መሄድ እንድትችል ተደርጋ ተሻሽላ ተሰርታለች። እንደሚያደርግ ከመጠቀም የተሰራች ሲሆን ወደ ኋላ መሄድ እንድትችል,የመጫን አቅም ያላት ሲሆን በአንድ ሊትር እስከ 40 ኪሎ ሜትር መጓዝ ትችላለች ተብሏል።,8.764276191000135,256,6.579013368999767,72,
+E17,instruction_following,"አዲስ አበባ፣ ታህሳስ 15፣ 2012(ieiabi) ኡበር የተሰኘው የታክሲ አገልግሎት ሰጭ ድርጅት ውስጥ የቦርድ አባል የነበሩ አሁን ሊለቁ የወሰኑት የቦርድ አባል ስማቸው ማን ነው። ምንጭ፣ ቢቢሲ
+
+አዲስ አበባ፣ ታህሳስ 15፣ 2012(ieiabi) ኡበር የተሰኘው የታክሲ አገልግሎት ሰጭ ድርጅት ውስጥ የቦርድ አባል የነበሩ አሁን ሊለቁ የወሰኑት",የ43 ዓመቱ ትራቪስ በድርጅቱ በተስተዋሉ የተለያዩ የሙስና ቅሌቶች 2017 ላይ በድርጅቱ በተስተዋሉ የተለያዩ የመግባደጃ የሆነው የታክሲ አገልግሎት ሰጪ ድርጅት ውስጥ የቦርድ አባል ስማቸው ማን ነው።,9.797543985999937,256,15.230782177000037,155,
+E18,instruction_following,"በመለየት ነው:
+
+2013 ዓ.ም በኢትዮጵያ በሀገር አቀፍ ደረጃ ሞዴል የጤና ኤክስotel የጤና ኮንፍራስ ላይ እውቅናን አግኝታለች በመለጫ የመለጫ የተመረጠችው ማናት ነው?
+
+በመለጫ የመለጫ የተመረጠችው ማናት ነው:
+
+2013 ዓ.ም በኢትዮጵያ በሀገር አቀፍ ደረጃ ሞዴል የጤና ኤክስotel የጤና ኮንፍራስ ላይ እውቅናን አግኝታለች",የአፍሪካ የጤና ኮንፍራስ ላይ እውቅናን አግኝታለች :: በሀገር አቀፍ ደረጃ ሞዴል የጤና ኤክስቴንሽን ባለሙያ ተብላ የተመረጠችው ማናት?,9.700155201999905,256,10.937407341999915,110,
+E19,instruction_following,ፌስቡክ የሰዎችን የፊት ገጽታ መለያ መሣሪያ በመጠቀም ምን ዓይነት ጥቅም አግኝቷል እና እና የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች የተገለጎች,በፈረንጆቹ 2010 የሰዎችን የፊት ገጽታ መለያዎች መሣሪያን የተጠቃሚውን ፊት ገጽታ በመቃኘት ስለ ደንበኛው ማንነት ሃሳቦችን የሚያቀርብ መሆኑ ተገልጿል።,8.946770646999994,256,12.511072711999986,125,
+E20,instruction_following,የኢትዮ-ıdırclamation ኣይተካል ክልክ ከተቀበረት የተሰረጡ የተገኘው መረጃ ያሳያል ከተቋሙ የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ ያሳያል ከተቀበረት የተገኘው መረጃ �,በእንጪ ፕሮጀክት እየጎበኙ ነው።,9.619257933000199,256,2.6838212140000905,29,
+E21,instruction_following,"በመጠቀም ለሚከተለው ጥያቄ መልስ ይስጡ:
+
+1. ባህሪ በተወሰኑ ደንበኞችን የግል ተንቀሳቃሽ ምስል በስህተት ለሌሎች ያጋራው ጎግል ይህ ችግር ያጋጠመው መቼ ነበር?
+
+2. ቢewe በተወሰኑ ደንበኞችን የግል ተንቀሳቃሽ ምስል በስህተት ለሌሎች ያጋራው ጎግል ይህ ችግር ያጋጠመው መቼ ነበር?
+
+3. በተወሰኑ ደንበኞችን የግል �",በግል የተወሰኑ ደንበኞችን የግል ተንቀሳቃሽ ምስል ይህ ችግር ያጋጠመው መቼ ነበር።,9.71063907100006,256,7.426886848999857,70,
+E22,instruction_following,"ürületilen cümlede, ሲርጎ ገቦች የሚያዩትን መቀርባል አስታውቋል እንዳለ ይጠቅሳሉ የተባለው ፡፡ ምሁራኖችበ አንዳንድ ሀገሮች በበይነ መረብ የሚደርስ ጥፋትን እንዳለ ይጠቅሳሉ። በጥናቱ ዩኒuchen የክሮች የሚያዩትን መቀርባል አስታውቋል እንዳለ ይጠቅሳሉ የተባለው ፡፡ ምሁራኖችበ አንዳንድ ሀገሮች በበይነ መረብ የሚደርስ ጥፋትን እንዳለ ይ�",በተሳካ ሁኔታ መሞከሯን ኢንተርኔት ስሙ ምን ይባላል።,9.273676868999928,256,4.0102110920001905,42,
+E23,instruction_following,በመሳብ ኣይማር እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና �,በቀን ቀን እየተቀራረቡ መጥተው ትላንት ምሽት በአንድ ላይ በመግጠም ደማቅ ብርሃን ታይቶ እንደነበር ሳይንቲስቶች መናገራቸውን ዘ ጋርዲያን አስነብቧል።,9.315769628999988,256,11.47237234999966,116,
+E24,instruction_following,በተባለው ወጣት በባህርዳር ዩኒucch እንዴት አድርጎ ለማሳየት ሂደር በበር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር የተባለው ወጣት በባህርዳር �,አንድ ወጣት ተማሪ ከወዳደቁ ቁሳቁሶች በውሃ ላይ የሚነዳ የብስክሌት ጀልባ መስራቱ ተገለጽ።,9.649159658999906,256,6.667952551000326,73,
+E25,instruction_following,5 ያስተዋወቀው በውሃ ላይ የምትሰራው የ Ellison's Death Penalty Cases ግን እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና,የኢሌክትሪክ ብስክሌት በላስ ቬጋስ አስተዋውቋል።,9.455156440999872,256,4.323204810999869,37,
+E26,instruction_following,በቅልብልቦሽ እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እና እ�,"በጣም የታወቀው ""ዓይጥ አለብሽ"" በመባባል የሚጫወቱት ነው።",9.007693818999996,256,4.2571164840001074,45,
+E27,instruction_following,በኢትዮጵያ የዘመናዊ ሕትመት ሥራ በማን ዘመን ተጀመረ እንደነበረና ጽሑፎቻቸውንም ለሕትመት ያበቁ እንደነበር ተምዝግቧል።,በአዕምሮ ጋዜጣ እየታተመ፣ አስቀድሞ በዳግማዊ ምኒልክ ዘመን ከተጀመረችው 'አዕምሮ' ጋዜጣ ጋር እስከ ጠላት ወረራ ዘመን ድረስ በአዲስ አበባ ከተማ ይሠራጩ ነበር።,4.342406896000057,97,13.262297710999974,131,
+E28,instruction_following,አሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦርኛ ይፋዊ ቋንቋ አደረገው። ከዚያ የአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር ንጉሥ ማነው ከአሦር �,3 ቴልጌልቴልፌልሶር አረማይስጥ ከአሦርኛ (አካድኛ) ጋር ይፋዊና መደበኛ ቋንቋ አደረገው።,8.965402707000067,256,6.807906952999929,70,
+E29,instruction_following,"በመሳሰባት:
+
+1. ምንባብ ላይ በመመስረት ጥያቄ መልስ ነው?
+   - ምንባብ ላይ በመመስረት ጥያቄ መልስ ነው ነው?
+
+2. ምንባብ ላይ በመመስረት ጥያቄ መልስ ነው ነው?
+   - ምን Benson የመለዴ በመመስረት ጥያቄ መልስ ነው ነው?
+
+3. ምን Benson የመለዴ በመመስረት ጥያቄ መልስ ነው ነው?
+   - ምን Benson የመለዴ በመመስረት ጥያቄ መልስ ነው ነው ነው?
+
+4. ምን Benson �",በዓረብኛ ፊደል ነው።,9.706018980999943,256,1.9476857329996164,16,
+E30,instruction_following,"በመጠቀም ለሚከተለው ጥያቄ መልስ ይስጡ:
+
+1. በአፍሪካ በመካከለኛው ምሥራቅ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነው። በአፍሪካ የሚገኝ አጥቢ አውሬ ነ","በአፍሪካ እና በመካከለኛው ምሥራቅ የሚገኘው ዘር እስከ 1,90 ሜ ይደርሳል ። ከመሬት እስከ 70 ሴ.ሜ ቁመት ሲኖረው ጭራው ደግሞ እስከ 100 ሴ.ሜ ርዝማኔ ያሳያል ። ሴቲቱ ከወንዱ አነስ ትላለች ። በዱር ሲኖር እስከ 10 አመት እድሜ ያስመዘገቡ ግሥሎች አሉ።",9.626641870999947,256,20.012205360999815,209,
+E31,translation,"Sure, I can help you translate that into English. Here's the translation:
+
+""High school students in China have been learning to code for many years.""
+
+This sentence is about young people in China who are learning programming languages like Python or Java at school. It highlights how many of these students have been using computers and programming tools since they were in high school.","""Today's work inspires me to continue working hard.""",2.5125322599999436,73,1.1250523670000803,12,
+E32,translation,Hello! How can I assist you today?,"""His father is very successful in life.""",0.3420914129999346,10,0.9585800740001105,10,
+E33,translation,"The text appears to be in Somali and translates to English as:
+
+""Let's go out for a walk today""
+
+This is a casual statement expressing an intention to go outside for some exercise or leisure time. It suggests that the speaker has decided to take a break from their usual routine and engage in physical activity.",የአረጋውያን ብቻ ሳይሆን ከሠላሳ ዓመት ዕድሜ በላይ ለሆነ እያንዳንዱ ግለሰብ አስፈላጊ ነው።,2.184700023000005,63,7.924844286999814,77,
+E34,translation,"I understand you're asking about the pronunciation of ""ስለዚህ"" in መርጉም (Baorom) and መርጉም (Baorom). Let me break it down for you:
+
+1. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+2. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+3. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+4. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+5. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+6. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+7. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+8. መርጉም (Baorom): This is the name of a city in northeastern India.
+
+9. መርጉም (Baorom): This is the","""His father has been working hard in the community.""",9.75017674600008,256,1.1957310470002085,12,
+E35,translation,"The text you've provided appears to be in Somali and seems to be discussing the current state of Somalia's economy. Here’s a breakdown:
+
+1. ""የተሰጠውን"" translates to ""Today""
+2. ""ዌተማርኛ ቋንቋ"" means ""Somalia's currency""
+3. ""አማርኛ ቋንቋ ተርጉም"" translates to ""Somalia's exchange rate""
+
+So, the text is reporting on the current value of Somalian currency relative to another currency (likely the US dollar). It also mentions that the exchange rate has been fluctuating recently.
+
+This kind of information can provide insights into economic conditions or trends in Somalia, which could be useful for various purposes such as financial planning, investment analysis, or understanding global economic dynamics.",... ያን አስከፊ እስር ቤት አንስቼ ለመጣል ከአፋፍ ደርሼ ነበር መሰለኝ።,5.87694466899984,171,5.654818819999946,59,
+E36,translation,"The text you've provided appears to be in Somali and seems to be discussing the current situation in the United Arab Emirates (UAE). The speaker is expressing their concern about the country's economic situation and its potential impact on the region.
+
+Here’s a summary of key points:
+
+1. **Current Situation**: The speaker mentions that there has been an increase in unemployment rates in the UAE.
+2. **Concerns**: They express worry about the economic challenges facing the country, particularly regarding job opportunities and economic growth.
+3. **Regional Impact**: The speaker notes that this could have implications for neighboring countries and potentially affect regional stability.
+
+This type of statement often reflects broader concerns about economic conditions and geopolitical dynamics in Middle Eastern countries.","በየአማርኛ ጠቋማት ውስጥ ኢን tablespoon (100-200) ኢንmyModalLabel ኢንሙስትመንት, አገልግሎቶች, ሰራተኞች UAEU 400 እና 500 ህይነት እና 600 ሁድረግ ሆኖ እና 700 ማብር ሆኖ እንዲያገለግል ይቀጥላሉ።",5.647936697999967,145,14.206258654999601,145,
+E37,translation,"The text you've provided appears to be in Somali and seems to be discussing the current state of Somalia's economy. Here’s a breakdown:
+
+1. ""የተሰጠውን"" translates to ""Today""
+2. ""አማርኛ"" means ""Somali language""
+3. ""በናንቋ"" is likely an abbreviation for ""በናንቋ ባልደል"" which means ""economic situation""
+
+So, the text is reporting on the economic condition of Somalia at the present time.
+
+In Somali, this could refer to various aspects such as inflation, unemployment rates, or other economic indicators affecting the country. The phrase ""በናንቋ ባልደል"" suggests that it might be referring to economic data or figures from recent times.
+
+If you have any specific questions about the content or need further clarification, feel free to ask!","In the English translation of 'The 20-day battle against malaria saves lives' (Kumula Malaria: Save Lives in 20 Days),",6.697553278000214,185,3.906319364999945,33,
+E38,translation,"Here's the English translation:
+
+""Others have left and relocated to another state.""
+
+This sentence is in English and refers to people who have moved away from their current location and are now living or working elsewhere.",Others እና የአማርኛ ግዜ ክልቅ የሚያስጥታች የሚከለበት የሆነ አካባቢ መሳብ እና የመጣቀባዊ ምግብ ያላይ አካባቢ አድራሉ።,1.4349238830000104,42,8.630678357000306,94,
+E39,translation,"Yes, I understand your sentiment. The Sentinel is an AI system designed to provide information and insights into various topics. It's important to note that while it can be useful for research purposes, its primary function is to assist users in understanding complex concepts or providing factual information.
+
+If you have specific questions about the Sentinel or need help with any topic related to it, feel free to ask!",በአዎቹ የሚያገኙ የትግራዊ መስከል ውስጥ ይመጀመሪያው ያለ የአማርኛ ቋንቋ ወደ አማርኛ ቋንቋ ተርጉም።,2.6471440350001103,78,8.520894873000088,83,
+E40,translation,"Here's my translation of the given text:
+
+""Let us read, and let us dance; these two pleasures will never hurt the world.""
+
+This is a proverb that translates to ""Let us read and let us dance; these two things won't harm the world."" It suggests that engaging in both reading and dancing can be beneficial for one's well-being and happiness.
+
+The context provided indicates that this quote is from a conversation or piece of literature where the speaker is encouraging people to engage in both reading and dancing as ways to improve their lives. The phrase ""these two amusements"" likely refers to activities like reading books and dancing, which are often considered enjoyable pastimes.",የአካባቢ መሆኑ የሚያገለበቅ ውስጥ ትልግዎችን ያላቸውን የአማርኛ ባህሪክ ይመጀመሪያ እንዲያሳብ የሚያገለበቅ የትራጉ ነው።,5.647190503000047,136,9.443199117999939,95,
+E41,translation,"It seems like you've provided some context about something that's been happening in the world recently. However, I don't have enough information to provide an accurate translation or explanation of what ""everything is becoming more transparent and honestly"" means in English.
+
+If you'd like me to help with any other questions related to this topic, please let me know!",It was high time for transparency to be increased in society.,2.458992902000091,71,1.3320966549999866,13,
+E42,translation,"Sure, I can help with that! Here's the translation:
+
+""Several compliments from strangers were received. """,በአካባቢ የሚያገኙ መረጃ ውስጥ የሚከል የተለያሳት ማዕግድ እንዲያዝነት ይመጀመሪያ ነው።,0.82359110099992,23,6.083263944000009,67,
+E43,translation,It is very important to spend quality time with children.,የአካባቢው ጥናት ደጫሮ መሰረት ማለምህርት የሚያገበር የተመጣጠነት ስራ ነው።,0.42060229599997,12,6.2914068630002475,60,
+E44,translation,"Yes, you can live in a shed with lots of nature around you. This is a common practice among many people who enjoy spending time outdoors and enjoying the beauty of nature. It's also a way to stay connected with your surroundings and appreciate the natural world around you.",በአካባቢ የሚያገኙ የመስራት መሆን ውስጥ የተለያዎች ያላቸው የፃይም ስታት ይፈልጋል።,1.9004702740000994,55,6.327059237000412,69,
+E45,translation,"Certainly! Here's an English translation of the provided text:
+
+""We reaffirm our strong belief that, based on a perspective for the Mediterranean as a region of peace, stability, and prosperity, it is in the interest of Europe as a whole to build our common European project.""
+
+This translation maintains the original meaning while adapting it to English grammar and syntax.","To reaffiramos nuestra fuerte creyente que construir nuestro proyecto común europeo en la ciudad del Mediterrano como punto de encuentro para la paz, el equilibrio económico y la prosperidad son elementos fundamentales para el desarrollo económico y social de Europa.",2.5319119570001476,71,5.730722376999893,56,
+E46,summarization,"This text appears to be in a language I'm not familiar with, but it seems to be discussing the history and significance of the Kingdom of India during the time of King Chandragupta Maurya. The key points from the text include:
+
+1. The historical context: Chandragupta Maurya was the first king of the Mauryan Empire.
+2. The kingdom's importance: It was one of the most powerful kingdoms in ancient India.
+3. The impact on Indian culture: The empire had a profound influence on Indian society and culture.
+
+The text also mentions that Chandragupta Maurya was known for his military prowess and conquests. However, without more context, I can't provide specific details about the events described. If you have any questions about the content or need further clarification, feel free to ask!",በፌስቡክ ገጹ ላይ በኬንያ መሪዎች የቤት ውስጥ አገልጋይ ሆኖ መኖርን እንደሚመርጥ የሚናገረው ብሪያን ኪቤት ቤራ ሰኞ እለት ነበር በማሪ ላይ በጥይት ከቆሰለ በኋላ ሆስፒታል ገብቷል።,7.163339330000099,171,15.058330371000011,148,
+E47,summarization,"Here's the translation of the given text into English:
+
+""His Excellency has been serving in this position for over ten years.""
+
+This appears to be a statement about someone holding a specific position and their tenure in that role. The phrase ""has been serving"" indicates that they have been working there for an extended period of time, which is common when discussing long-term employment or service in a particular capacity.",በመገኘቱ ሙዚዬም ሊገባለት ችሏል።,2.9659591699999055,82,2.9082381919997715,29,
+E48,summarization,"Here's the translation of the text provided:
+
+""የተሰጠውን ጽሑፍ ማጠቃለያ አውጣለት""
+
+This appears to be a response or message from someone named ጽሑፍ (Wu), who is likely a Chinese character or name. The text seems to be discussing something related to a conversation or interaction with another person named ጽሑፍ.
+
+Without more context, I can't provide additional details about what this message might be about. It could be part of a conversation, an announcement, or simply some casual communication between two people. If you have any specific questions about the content or meaning of this message, feel free to ask!",መፈንቅለ መንግሥት ቁልፍ ሚናን ከተባለ የሰላም አስጠባቂ ተቋም የተመለከተውን ቢሮ ይመሩ ነበር ተብሏል። ከሁለት አመታት በፊት የብርጋዲየር ጄኔራል ማዕረግን የተቋሙም መሪ የሆኑት በዚህ ተቋም ከመሮ በፊት በአፍሪካ ህብት የሰላምና ፀጥታ ኮሚሽን ግጭት አፈታት ስልታዊ ዕቅድን የተመለከተውን ቢሮ ይመሩ ነበር ተብሏል። �,6.417344447000005,153,25.656952565999745,256,
+E49,summarization,"Here's my analysis of the given text:
+
+The context appears to be discussing the development and impact of a specific technology or system, likely related to blockchain or cryptocurrency. The key points include:
+
+1. A new version of a blockchain platform (likely Ethereum) was released.
+2. It includes features that were previously missing from the original version.
+3. There is an expectation for this feature to become widely adopted.
+
+The tone suggests excitement about potential improvements in blockchain technology, particularly regarding security and scalability.
+
+However, without more context, I can't provide details on specific implementation details or any potential risks associated with this release. This seems like a promising development in the field of blockchain technology, but it would be useful to have more information before making any investment decisions.",ግሪካዊቷ ኤካትሪኒ ስቴፋኒዲ እና ቤል gadamawa ናፊሳቶ ቲያም የአልማዝ ተፎካካሪ ሆነው ሲቀርቡ ሙታዝ ኢሳ ባርሻም ከ10 ሺህ ሜትሮች ሯጯ አልማዝ ዘንድሮ በተካሄደው የዓለም አትሌቲክስ ፌዴሬሽን ማሕበር አስታውቋል። በሌላ በኩል በወንዶቹ የ10 ሺህ ሜትር አሸናፊ ትውለደ ሶማሊያ እና የእንግሊዝ ዜግነት ያለው ሞ ፋራህ �,5.360424918999797,152,25.124539118999564,256,
+E50,summarization,"Here's the translation of the text provided:
+
+""የተሰጠውን ጽሑፍ ማጠቃለያ አውጣለት""
+
+This appears to be a response or message from someone who is discussing something related to the topic of ""sea level rise."" The context suggests that there has been some discussion about sea levels rising due to climate change and global warming.
+
+The key points in this response could include:
+
+1. Mentioning the current state of sea levels.
+2. Discussing potential impacts on coastal areas.
+3. Speculating on future scenarios for sea levels.
+4. Acknowledging the challenges posed by these changes.
+
+Without more context, I can't provide specific details, but it seems like this conversation is likely part of a broader discussion about environmental issues and their implications for human societies.",የዘረ መል ካርታው ከቅርብ ጊዜ ወዲህ እየታየ ያለውን ከመቷል የአየር ጸባይ መቋቋም የሚችሉ አዳዲስ የስንዴ ዝርያዎችን በአጭር ጊዜ ለማስተዋወቅ ይረዳል ተብሎለታል። የምርምር ውጤቶች የሰብል ልጅ ዝግመተ ለውጥ በአየር ፀባይ ይመራ ነበር የሰው ልጅ ተለዋዋጭ የአየር ጸባይን ተቋቁሞ ለመኖር ክሪስቶባል ነው ብለውታል። • ም,6.785792507999986,173,25.044860835000236,256,
+E51,summarization,"This text appears to be in the form of a poem or song lyrics, likely from a traditional African language. The speaker is singing about a festival celebrating the harvest and the return of crops after a long drought.
+
+The lines describe various aspects of the harvest season:
+
+1. The sun rises over the fields, symbolizing the beginning of new life.
+2. The farmer's face shows joy as he prepares for the harvest.
+3. The sky is filled with birds, indicating that the farmers have gathered their crops.
+4. The people gather around the fire, symbolizing the warmth and comfort they receive during this time.
+5. The wind blows through the trees, representing the movement of nature.
+6. The rain falls gently on the land, symbolizing the nourishment of the earth.
+7. The people eat together, showing unity and community spirit.
+8. The sky clears up, signifying the end of the day and the start of another cycle.
+
+Overall, the poem seems to capture the essence of a traditional African celebration of the agricultural year, highlighting the importance of planting, harvesting, and sharing the fruits of the soil.",በሃገሪቱ ምስራቃዊ ክፍል ነዋሪ የሆነችው ሶፊያት ሙቴሲ ከዚህ ቀደም ለምርመራ የጤና ማእከል ሄurret እንዲያሳድጉላትም እርዳታን እየሻተች ነው። •ፀረ-መውለድ ፍልስፍናን ያውቁታል? እንደ ሞኒተር ዘገባ ከሆነ የመጀመሪያ ባሏን በሞት ያጣች ሲሆን የአሁኑ አጋሯ ደግሞ ሃያ ልጆች አሉት ተብሏል።,8.371117694000077,227,23.56693435599982,237,
+E52,summarization,"This appears to be a text message or conversation between two individuals discussing the weather and climate in India. The sender is asking about the current weather conditions and mentioning that they have been experiencing some changes recently.
+
+The key points from the conversation include:
+
+1. Current weather conditions: The sender mentions that they have been experiencing some changes recently.
+2. Specific weather phenomena mentioned: They mention ""some changes"" and refer to ""some changes"" as ""some changes.""
+3. Mention of specific weather phenomena: The sender refers to ""some changes"" as ""some changes.""
+
+Overall, this conversation seems to be about the current state of the Indian weather and how it has changed over time.",ለሳምንት አገልግሎቱ ተቋርቶባቸው ከነበሩት አካባቢዎች መካከል አንዱ በሆነው በአላማጣ ሙሉ በሙሉ የቴሌኮም አገልግሎት በከፊል ተጀምሯል ብለዋል። በእነዚህ አካባቢዎች በከፊል አገልግሎት ለመመለስ ኢትዮ-ቴሌኮም የጥገና ሥራ እያካሄደ መሆኑን የገለፁት ፍሬሕይወት ለዚህም የሀይ ግጭት በተካሄደባት ትግራይ ክልል የቴሌኮም አገል,5.10532302799993,136,25.139570269999695,256,
+E53,summarization,"This text appears to be in Somali and discusses the weather conditions for a particular location. Here's a summary of key points:
+
+1. The text mentions a place with temperatures ranging from 26°C to 40°C.
+
+2. It notes that the temperature is expected to remain stable throughout the day.
+
+3. The text also indicates that there will be no significant change in the weather pattern over the next few days.
+
+4. The author suggests that this could lead to comfortable outdoor activities or events.
+
+5. The phrase ""oral"" at the end implies that the information was provided through oral communication rather than written records.
+
+The context seems to be about predicting weather conditions based on historical data and current trends, which is common practice in meteorological forecasting.","የ33 ዓመቷ ካትሪያና ሃንድዝዩክ ሕልፈት ዩክሬናውያንን እጅጉን ያስደነገጠ ነበር። የአሲድ ጥቃቱ ካደረሰባት ቃጠሎ በኋላ በሕክምና ስትረar በፊት ሕይወቷ አልፏል። • ""ሌሎች ሴቶች ላይ የአሲድ ጥቃት ሳይ ይረብሸኛል፣ ህመሜን ያስታውሰኛል"" ካሚላት መህዲ ክስ ከተመሠረተባቸው ባለሥልጣናት መካከል የአንድ ግዛት ምክር ቤት ኃላ",5.7770057359998646,152,25.24266541299994,256,
+E54,summarization,በመልዕክት በመግለጻቸው የተነሳ በርካታ ድረ-ገጾች መልዕክቱን ይገኙበታል። ነገርግን አንዳንድ ደንበኞች በመልዕክቱ መበሳጨታቸውን ደጋግመው በመግለጻቸው የተነሳ በርካታ ድረ-ገጾች መልዕክቱን እንዴት ማስቆም እንደሚቻል የሚገልፅ መረጃ እያሰራጩ ይገኛሉ። ስለቫይረሱና ስለምልክቶቹ መረጃ የያዘው ይህ መልዕክት ደዋዩ ብቻ የሚሰ,በሕንድ እስካሁን ድረስ ቫይረሱ የተገኘባቸው ሰዎች ቁጥር ከሌላ አገራት አንፃር ሲታይ አነስተኛ ነው ጂሎ፣ ቢኤስኤንኤል እና ቮዳፎን የተባሉት ኩባንያዎች መንግሥት ያቀረበላቸውን ጥያቄ ተግባራዊ ካደረጉት መካከል ይገኙበታል። ስለቫይረሱና ስለምልክቶቹ መረጃ የሚገልፅ መረጃ እያሰራጩ የሚገልፅ በርካታ奴隶 የሚያስል ሰውና የጤ�,9.768202542999916,256,25.2807707930001,256,
+E55,summarization,"Here's my response based on the provided text:
+
+The text appears to be discussing the development of blockchain technology and its potential applications in various industries. It mentions that there is currently a shortage of miners (blockchain nodes) due to the high cost of mining. The author suggests that this could lead to increased adoption of blockchain-based solutions.
+
+Key points from the text include:
+1. A shortage of miners due to high costs.
+2. Potential for increased adoption of blockchain-based solutions.
+3. The need for more miners to maintain the network.
+4. The possibility of using blockchain technology to solve certain types of problems or challenges.
+
+This seems to be an interesting discussion about the future of blockchain technology and its impact on industry adoption.",በጎ ፈቃደኞቹ ከCUSHA ብርሀን የሚገኘው ቫይታሚን ዲ እጥረት በsegue የቫይታሚን ዲ እንክብሎች የሚያደርግ ከሆነ ትልቅ ዕሬ የሚገኙ ናቸው፣ የጎንዮሽ ጉዳት ሊያስከትል እንደሚችል ባለሙያዎቹ ገልጽ እንዲያሳሌል። በምርምሩ መሪ የሆኑት ዴቪድ ጆሊፍ እንደሚሉት ''ሙከራው በዚህ ረገድ ጠንከር ያለ ምላሽ ይሰጠናል ብለን እናምና,5.132442943000115,146,25.06399311799987,256,
+E56,summarization,"This text appears to be in the context of discussing the historical events and political situation in Ethiopia, particularly during the reign of Emperor Haile Selassie (1930-1974). The text mentions several key points:
+
+1. Haile Selassie's rule was marked by significant changes in Ethiopian politics.
+2. He implemented various reforms and policies aimed at modernizing the country.
+3. There were also efforts to strengthen the military and improve governance.
+4. The text notes that there were some internal conflicts within the government.
+
+The overall tone suggests a period of transition or consolidation in Ethiopian politics following Haile Selassie's rule. It implies that the country had undergone substantial change since his time as emperor, with new leaders taking over and implementing new strategies for governance and development.",የኢትዮጵያ ህብረተሰብ ጤና ኢንስቲትዩት ከሁለት በፊት በማጠቃለያ ስጥ አስታውቆ ነበር። የጤና ጥበቃ ሚንስትር ከበፌስቡክ ገጹ ላይ እንዳስታወቀው የአራቱ ግለሰቦች የደም ናሙና ወደ ደቡብ አፍሪካ ተልኮ ከቫይረሱ ነጻ መሆናቸው ተረጋግጧል ብሏል።,5.8310410510000565,162,19.849434367999947,201,
+E57,summarization,"This text appears to be discussing the current state of the economy and its impact on various sectors in India. The key points include:
+
+1. The Indian economy is experiencing growth but with some challenges.
+2. There's a focus on infrastructure development and improving connectivity.
+3. The government has been working on increasing foreign direct investment (FDI).
+4. There's also an emphasis on education and skills development.
+5. The country is investing in renewable energy sources like solar and wind power.
+
+The text suggests that while there are positive developments, there are still areas for improvement, particularly in terms of infrastructure and education. It also highlights the importance of FDI and other economic activities in driving growth and job creation.",''. . . ጥፍር መንቀል ሕጋዊ አይደለም ስንለው ብሔሩ ውስጥ ለመደበቅ ይሞክራል' የኢሚግሬሽንና የዜግነት ጉዳዮች ተቋም አቶ ሌንጮ ለታ በበኩላቸው ''የመበታተን ባህል ወደ ችግር እና ድህነት ነው የሚወስደን ሳይሆን እንደዛሬ ነው ማሰብ ያለብን' የsegue አደረ箔 የሆኑት አቶ አዲሱ አረጋ ዛሬ ከሰዓት በሰጡት መግለጫ በህዝቡ �,5.774622779000083,142,25.510521266999604,256,
+E58,summarization,"Here's my analysis of the text provided:
+
+1. **Title and Context**: The title ""ይህ አረፍተ ነገር ስለ ምንድን ነው የሚያወራው"" translates to ""Healing and Healing"" in English. This suggests that the text is about healing or recovery.
+
+2. **Content Analysis**:
+   - The text describes a person who has been ill for some time.
+   - They mention being treated by a doctor (likely a healer).
+   - The text ends with a quote from the person themselves, stating they have recovered.
+
+3. **Key Points**:
+   - The person was previously ill but now feels better.
+   - They were treated by a doctor.
+   - The treatment seems to be effective as it mentions them having recovered.
+
+4. **Implications**:
+   - The person appears to be someone who has undergone medical treatment.
+   - Their recovery seems to be due to the effectiveness of the treatment they received.
+
+Given these points, I would say this text is likely describing a successful case of healing or recovery after illness. It could be part of a larger narrative about health care or a story about a person who has overcome their",የህፃኗ እናት ለቢቢሲ እንደገለፀችው በመጀመሪያ የሚገኘውን ክሊኒክንም ለቃ መሄድ እንደተደረገበት የሚገኘውን ክፍያ ሁሉ አስተዋፅኦ ካደረጉት መካከል አንዱ ፕሬዚዳንቱ አሊ ቦንጎ ናቸው። የህፃኗ እናት ሶኒያ ኦኮሜ ለቢቢሲ እንደገፀችው ምንም በተጨማሪ ህፃኗ ክትባት አልተሰጣትም በሚልም አማራለች የሚልም አማራለች እ,9.365816842999948,256,24.964321762000054,256,
+E59,summarization,"Here's the summary of the conversation:
+
+The user is discussing the population growth rate in Ethiopia and its impact on the country's economy. The user mentions that there has been a significant increase in population over the past few years, which has led to economic challenges for the country.
+
+The user also notes that the population growth rate has been higher than expected, with some regions experiencing faster rates compared to others. They mention that this could be due to various factors such as migration, education, or other demographic changes.
+
+The user expresses concern about the potential long-term effects of these population trends on the country's development and stability. They suggest that policymakers need to take action to address these issues and ensure sustainable economic growth.
+
+Overall, the conversation highlights the importance of population management and economic planning in addressing demographic challenges in developing countries like Ethiopia.",ነገር ግን ይህ በህፃናት ሴቶች ብቻ ሳይሆን በወንዶችም እንደሚከሰት በቅርቡ የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተባበሩት መንግሥታት የህፃነት መር Cuomo የተ,6.354074359000151,165,25.810536242000126,256,
+E60,summarization,"Here's my response based on the provided context:
+
+The text appears to be discussing the effects of deforestation and climate change on the Amazon rainforest in Brazil. The speaker mentions that deforestation has led to significant changes in the local ecosystem, including loss of biodiversity and altered weather patterns.
+
+They also discuss how these changes have affected the indigenous communities who live near the forest. The speaker notes that many of them have been forced to leave their homes due to the destruction of their land and resources.
+
+Overall, the text highlights the urgent need for action to protect the Amazon rainforest and its inhabitants from the negative impacts of human activities such as deforestation and climate change.",ዘ ሰንደይ ታይምስ እንደዘገበው የፓርላማ አባሉ ላይ ክስ በባለፈው ሐምሌና በተያዘው ዓመት ጥር ወር እና በተያዘው ዓመት ጥር ወር እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት እና በተያዘው ዓመት �,4.753092657000025,133,25.432512536000104,256,

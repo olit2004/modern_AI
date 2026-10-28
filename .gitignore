@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.o
 
 # Environments
 .venv/
@@ -14,21 +15,19 @@ ENV/
 *.sqlite
 *.sqlite3
 *.db
-results/cache/
-
-# Experiment outputs & large model weights
 results/
 results*/
+**/results/
+**/results*/
+**/cache/
 
 # Solver binaries & compiled objects
-src/solver/cpp/pons/*.o
-src/solver/cpp/pons/c4solver
-src/solver/cpp/pons/generator
-src/solver/cpp/pons/.depend
-src/solver/cpp/c4_solver
-
-# Opening books (large binary files downloaded via script)
-src/solver/cpp/pons/*.book
+**/*.o
+**/c4solver
+**/c4_solver
+**/generator
+**/.depend
+**/*.book
 
 # IDE & OS
 .vscode/

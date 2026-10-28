@@ -1,133 +1,135 @@
-# Verified Self-Improvement on Connect-4
+# Modern AI Research & Capabilities: Recursive Self-Learning & Capability Distillation
 
-An end-to-end framework to teach a small neural network Connect-4 player to self-improve through autonomous practice rounds, and empirically measure whether solver verification prevents policy degradation.
+This repository houses two self-contained research tracks investigating autonomous capability acquisition, verification, and efficiency in modern neural models:
 
----
-
-## 🎯 The Core Scientific Question
-Does autonomous self-play practice yield real policy improvement, and does **solver verification** (referee labeling) make a statistically significant difference compared to:
-1. **Version 1 (Fixed Baseline):** Training on a fixed dataset with zero practice rounds.
-2. **Version 2 (Unverified Self-Improvement):** Training on its own practice moves without checking them.
-3. **Version 3 (Solver-Verified Self-Improvement):** Training on practice positions where every example is verified and labeled by a perfect Connect-4 solver.
-
-All three versions are held to **strict parity**: exactly identical model architecture, identical total training examples, and identical gradient update steps.
+1. **`recursive_learning/`**: **Task 1 — Verified Recursive Self-Improvement on Connect-4**  
+   Autonomous self-play loop with an infallible C++ bitboard solver referee, experience replay buffer, strict acceptance gating with rollback, and zero-leakage reflection-symmetric data partitions.
+2. **`Qwen_student/`**: **Task 2 — Low-Resource Amharic Capability Distillation**  
+   Cross-model knowledge distillation from a larger teacher (`google/gemma-3-4b-it`) to a compact 494M-parameter student (`Qwen/Qwen2.5-0.5B-Instruct`) using 4-bit QLoRA.
 
 ---
 
-## 🏗️ Repository Architecture
+## 📁 Repository Structure
 
 ```
 .
-├── configs/                  # Experiment configurations (YAML & JSON)
-│   ├── v1_baseline.yaml      # Version 1 config
-│   ├── v2_unverified.yaml    # Version 2 config
-│   ├── v3_verified.yaml      # Version 3 config
-│   └── quick_test.json       # Fast smoke-test configuration
-├── data/                     # Fixed datasets with strict zero-leakage partitions
-│   ├── train.json            # 70% training pool
-│   ├── dev.json              # 15% validation/gating pool
-│   └── final_test.json       # 15% locked test set (guarded by --final flag)
-├── notebooks/                # Thin execution notebooks
-│   ├── colab_runner.ipynb    # Google Colab GPU runner
-│   └── kaggle_runner.ipynb   # Kaggle GPU runner
-├── src/
-│   ├── game/                 # Connect-4 game engine (symmetries, tensor encoding)
-│   ├── solver/               # Pascal Pons C++ bitboard solver wrapper & cache
-│   ├── data/                 # Zero-leakage split generator & locked loader
-│   ├── model/                # Connect4Net CNN, soft loss, checkpointing
-│   ├── eval/                 # Opponents (Random, Heuristic, Minimax), tournaments
-│   ├── loop/                 # Self-improvement engine, gating, rollback
-│   ├── analysis/             # Publication charts and report generator
-│   └── utils/                # Platform detection, seeds, config parsing
-├── tests/                    # Unit tests running in seconds
-├── export_teachers.py        # Exports teachers for Task 3 distillation
-├── inspect_teachers.py       # Compares soft teacher distributions
-├── play_agent.py             # Playable interactive CLI against the AI
-├── run_experiments.py        # Main multi-seed experiment runner
-├── requirements.txt          # Pinned dependencies
-└── README.md
+├── README.md                      # Unified repository overview and execution guide
+├── recursive_learning/            # Track 1: Connect-4 Recursive Self-Learning
+│   ├── configs/                   # Experiment hyperparameters (rounds, budgets, tolerances)
+│   ├── demo.py                    # Presentation demo (summary table, progress plots, live matches)
+│   ├── notebooks/
+│   │   └── colab_runner.ipynb     # Google Colab execution runner with GPU support
+│   ├── requirements.txt           # Python dependencies
+│   ├── run_experiments.py         # Main training and evaluation engine
+│   ├── src/                       # Core engine, solver wrapper, neural net, tournament eval
+│   └── tests/                     # Comprehensive test suite (game logic, dataset, solver, net)
+└── Qwen_student/                  # Track 2: Amharic Capability Distillation
+    ├── final_adapter/             # Trained 4-bit QLoRA adapter weights & tokenizer
+    ├── evaluation_prompts.csv     # 60 held-out evaluation prompts
+    ├── experiment_notes.txt       # Quantitative logs, training configs, qualitative observations
+    ├── experiment_summary.json    # Machine-readable experiment and evaluation metrics
+    ├── predictions_final.csv      # Model outputs on evaluation prompts
+    ├── student trainer.ipynb      # End-to-end training and inference notebook
+    └── training_data.csv          # Clean teacher-generated Amharic dataset (1,843 examples)
 ```
 
 ---
 
-## 🛡️ Ground Rules & Safeguards
+## 🕹️ Track 1: Verified Recursive Self-Improvement (`recursive_learning/`)
 
-1. **Portable by Design:** Auto-detects Google Colab (Drive mounting), Kaggle (`/kaggle/working`), or local CPU/GPU.
-2. **Strict Parity:** V1, V2, and V3 use identical total example counts and gradient steps so differences stem purely from the verification method.
-3. **Zero Data Leakage:** Split strictly by **canonical position hash** (combining both perspective and horizontal reflection symmetry). No mirrored position can ever leak across train/dev/test splits.
-4. **Guarded Final Test Set:** Code strictly refuses to read `final_test.json` unless the `--final` flag is supplied.
-5. **Acceptance Gating & Rollback:** Each self-improvement proposal is evaluated on dev agreement; if performance drops beyond tolerance, the proposal is rejected, logged, and rolled back.
-6. **Resumable:** Checkpoints and JSON logs saved after every round. Interrupted jobs resume without duplicating work.
+### Research Motivation
+Can a neural network autonomously self-improve through practice games without falling victim to self-referential policy collapse or catastrophic forgetting? In Connect-4—a strongly solved zero-sum game—we investigate how external solver verification prevents degradation and guides genuine capability gains.
 
----
+### Key Architectural Pillars
+- **Infallible Referee (Pascal Pons C++ Bitboard Solver):** Evaluates every visited board position and computes exact game-theoretic win/draw/loss values and optimal move sets with sub-millisecond latency.
+- **Experience Replay Buffer:** Retains foundational board positions from early exploration while assimilating newly corrected blunder positions from self-play, preventing catastrophic forgetting.
+- **Strict Acceptance Gate with Rollback:** After each round, proposal weights are evaluated on a held-out dev split. If agreement degrades beyond tolerance ($\tau = 0.015$), the proposal is automatically rejected and rolled back to the previous accepted checkpoint.
+- **Zero-Leakage Reflection-Invariant Hashing:** Connect-4 possesses bilateral reflection symmetry. Positions are partitioned using canonical byte hashes (`min(hash(board), hash(mirrored_board))`), guaranteeing zero leakage between train, dev, and test sets.
+- **Anti-Determinism Randomized Openings:** Prevents greedy models and deterministic opponents from looping through identical games by initializing evaluation matches with 2–4 uniform random opening plies over 100+ games per opponent.
 
-## 🚀 Quickstart & Reproduction
+### Running Track 1 Locally
 
-### 1. Run Unit Tests (Runs in < 15 seconds)
 ```bash
-pytest tests/ -v
-```
+cd recursive_learning
 
-### 2. Run Experiments
-To run all three conditions across 3 seeds on Colab/Kaggle/Local:
-```bash
-python run_experiments.py --config configs/v3_verified.yaml --condition all --final
-```
+# 1. Install dependencies
+pip install -r requirements.txt
 
-Or run a fast smoke test:
-```bash
-python run_experiments.py --config configs/quick_test.json
-```
+# 2. Build high-speed C++ solver & download opening book
+make -C src/solver/cpp/pons
+test -f src/solver/cpp/pons/7x6.book || curl -L -o src/solver/cpp/pons/7x6.book https://github.com/PascalPons/connect4/releases/download/book/7x6_small.book
 
-### 3. Generate Charts & Report
-```bash
-python src/analysis/generate_report.py --results_dir results
-```
-Generates:
-- `results/figures/agreement_per_round.png`
-- `results/figures/diversity_per_round.png`
-- `results/REPORT.md`
+# 3. Run validation test suite
+PYTHONPATH=. pytest tests/ -v
 
-### 4. Play Interactively
-Play a game against your trained agent:
-```bash
-python play_agent.py --checkpoint results/teachers/teacher_round3_improved.pt
-```
-Or against benchmark opponents:
-```bash
-python play_agent.py --opponent minimax --first
+# 4. Launch Verified Self-Improvement Loop
+python run_experiments.py \
+    --config configs/self_learning.yaml \
+    --out results \
+    --clean \
+    --require_cpp
+
+# 5. Run Live Presentation Demo
+python demo.py --results_dir results --num_games 50
 ```
 
 ---
 
-## 🎓 Task 3 Distillation Handoff API
+## 🇪🇹 Track 2: Amharic Capability Distillation (`Qwen_student/`)
 
-Task 3 requires exporting the baseline (Round 0) and improved (Round 3) teachers to distill into a smaller student network using soft output distributions.
+### Research Motivation
+Compact language models (~0.5B parameters) have minimal exposure to low-resource languages like Amharic (Ethiopic Ge'ez script) during pre-training. We distill instruction-following and generation capabilities from an advanced teacher model into a lightweight, deployable student.
 
-### Exporting Teachers
-```bash
-python export_teachers.py --results_dir results --export_dir results/teachers
-```
+### Model Setup
+- **Teacher:** `google/gemma-3-4b-it` (High-resource generative reasoning)
+- **Student:** `Qwen/Qwen2.5-0.5B-Instruct` (494M parameters, base Amharic generation corrupt/incoherent)
+- **Training Method:** 4-bit QLoRA using `bitsandbytes` and PEFT
+  - Rank ($r$): 16, Alpha ($\alpha$): 32, Dropout: 0.05
+  - Target modules: `q_proj`, `k_proj`, `v_proj`, `o_proj`
+  - Optimizer: `paged_adamw_8bit`, Learning Rate: $2 \times 10^{-4}$
+  - Effective batch size: 16 (batch size 4, gradient accumulation 4)
+  - Trainable parameters: 2,162,688 (0.4359% of model)
+  - Adapter footprint: 8.27 MB
 
-### Distillation Soft Distribution Interface
-Any model checkpoint implements `predict_distribution()`:
+### Quantitative & Qualitative Results
+- **Training Data:** 1,843 clean instruction-response pairs; 0 sequence truncations at max length 1024.
+- **Inference Efficiency (Tesla T4 GPU):**
+  - Distilled student peak memory: **1.54 GB** (enables edge deployment)
+  - Average inference latency: **14.19s per response** (10.03 tokens/sec)
+- **Key Findings:**
+  - Base student produced corrupted mixed-script tokens, prompt repetition, and English leakage.
+  - Distilled student successfully internalized Amharic grammar structure and polite task-following patterns.
+  - Remaining challenges include factual hallucinations and repetitive terminal phrasing on abstract open-ended prompts, identifying clear avenues for future data-filtering iterations.
+
+---
+
+## 🚀 Running on Google Colab
+
+To train or demo the Connect-4 self-improvement engine on a free Google Colab T4/V100 GPU:
+
+1. Open [Google Colab](https://colab.research.google.com).
+2. Create a new notebook or upload `recursive_learning/notebooks/colab_runner.ipynb`.
+3. Set runtime to **GPU** (`Runtime` -> `Change runtime type` -> `T4 GPU`).
+4. Execute the setup cells:
+
 ```python
-from src.model.train import load_checkpoint
-from src.game.connect4 import Connect4Board
+# Clone the repository
+!git clone https://github.com/olit2004/modern_AI.git /content/modern_AI
+%cd /content/modern_AI/recursive_learning
 
-# Load teacher
-teacher, _ = load_checkpoint("results/teachers/teacher_round3_improved.pt")
+# Install dependencies and compile solver
+!pip install -r requirements.txt
+!make -C src/solver/cpp/pons
+!test -f src/solver/cpp/pons/7x6.book || curl -L -o src/solver/cpp/pons/7x6.book https://github.com/PascalPons/connect4/releases/download/book/7x6_small.book
 
-# Query soft distribution for any position
-board = Connect4Board()
-board.make_move(3) # e.g. center move
+# Run tests
+!PYTHONPATH=. pytest tests/ -v
 
-# Returns 7-element NumPy array summing to 1.0; illegal moves are guaranteed 0.0
-probs = teacher.predict_distribution(board, temperature=1.0)
-print("Soft Column Probabilities:", probs)
-```
+# Launch experiment loop
+!python run_experiments.py --config configs/self_learning.yaml --out /content/results --clean --require_cpp
 
-Verify teacher distributions side-by-side:
-```bash
-python inspect_teachers.py --moves "3324"
+# Run interactive demo & render charts
+!python demo.py --results_dir /content/results --num_games 50
+from IPython.display import Image, display
+display(Image(filename="/content/results/figures/demo_progress.png"))
 ```

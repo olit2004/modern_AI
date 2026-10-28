@@ -1,0 +1,213 @@
+
+============================================================
+AMHARIC CAPABILITY DISTILLATION
+FINAL EXPERIMENT BACKUP
+============================================================
+
+Backup created:
+2026-10-08T14:01:22.858866
+
+============================================================
+MODELS
+============================================================
+
+Teacher:
+google/gemma-3-4b-it
+
+Student:
+Qwen/Qwen2.5-0.5B-Instruct
+
+Student parameters:
+494,032,768 (~494M)
+
+============================================================
+TRAINING DATA
+============================================================
+
+Training examples:
+1,843
+
+Evaluation prompts:
+60
+
+Exact evaluation prompt matches:
+0
+
+Near matches >= 0.90:
+0
+
+Training leakage removed:
+0
+
+Maximum sequence length:
+1024
+
+Training examples truncated:
+0
+
+============================================================
+QLORA TRAINING
+============================================================
+
+Method:
+QLoRA
+
+Epochs:
+3
+
+Batch size:
+4
+
+Gradient accumulation:
+4
+
+Effective batch size:
+16
+
+Learning rate:
+2e-4
+
+LoRA rank:
+16
+
+LoRA alpha:
+32
+
+LoRA dropout:
+0.05
+
+Target modules:
+q_proj, k_proj, v_proj, o_proj
+
+Optimizer:
+paged_adamw_8bit
+
+Gradient checkpointing:
+True
+
+Seed:
+42
+
+Training time:
+17.73 minutes
+
+Peak training GPU memory:
+7.00 GB
+
+Final training loss:
+1.6830
+
+Trainable parameters:
+2,162,688
+
+Trainable percentage:
+0.4359%
+
+Adapter size:
+8.27 MB
+
+============================================================
+EVALUATION
+============================================================
+
+GPU:
+Tesla T4
+
+Decoding:
+Greedy
+
+max_new_tokens:
+256
+
+Batch size:
+1
+
+BASE STUDENT
+------------
+
+Precision:
+FP16
+
+Total time:
+420.08 seconds
+
+Average time:
+7.00 seconds/answer
+
+Average generated tokens:
+187.7
+
+Average speed:
+27.08 tokens/second
+
+
+DISTILLED STUDENT
+-----------------
+
+Precision:
+4-bit QLoRA/bitsandbytes
+
+Total time:
+851.75 seconds
+
+Average time:
+14.19 seconds/answer
+
+Average generated tokens:
+141.4
+
+Average speed:
+10.03 tokens/second
+
+Peak inference GPU memory:
+1.54 GB
+
+
+IMPORTANT:
+Base and distilled inference used different numerical precision
+and inference paths. Therefore the speed/memory difference should
+NOT be interpreted as a pure distillation or architecture effect.
+
+============================================================
+QUALITATIVE FINDING
+============================================================
+
+The base Qwen model showed very weak Amharic generation,
+including corrupted/mixed-language output, repetition,
+prompt copying, and unrelated answers.
+
+The distilled model showed a substantial improvement in
+Amharic-like generation and task-format behavior.
+
+However, the distilled model still showed:
+- repetition
+- semantic errors
+- incorrect answers
+- occasional failure to translate
+- hallucination
+- incomplete summarization
+
+Therefore the correct conclusion is NOT that distillation
+solved Amharic.
+
+The supported conclusion is:
+
+Response-level QLoRA distillation substantially improved
+the student's ability to generate Amharic-like text and
+follow the general task format, but semantic accuracy
+remained weak and repetitive generation persisted.
+
+============================================================
+IMPORTANT FILES
+============================================================
+
+training_data.csv
+evaluation_prompts.csv
+predictions_final.csv
+predictions_template.csv
+training_data_clean.csv
+final_adapter/
+experiment_summary.json
+experiment_notes.txt
+
+============================================================
