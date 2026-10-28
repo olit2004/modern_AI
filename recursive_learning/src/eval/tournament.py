@@ -1,22 +1,42 @@
 """
 Tournament match runner and game execution between any two players.
-Alternates first player and records win/draw/loss rates deterministically.
+Alternates first player and uses randomized opening plies (2-4 random moves)
+over 100+ games to eliminate determinism and avoid repeating games.
 """
 
 import random
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Tuple
 from src.game.connect4 import Connect4Board, PLAYER_1, PLAYER_2
 from src.eval.opponents import Player
 
-def play_game(player1: Player, player2: Player, verbose: bool = False) -> int:
+def play_game(
+    player1: Player,
+    player2: Player,
+    random_openings: int = 0,
+    rng: Optional[random.Random] = None,
+    verbose: bool = False
+) -> int:
     """
     Plays a single full Connect-4 game between player1 (P1, 1) and player2 (P2, -1).
+    Optionally starts with `random_openings` random plies to diversify starting states.
     Returns:
         1: player1 won
        -1: player2 won
         0: draw
     """
     board = Connect4Board()
+    active_rng = rng if rng is not None else random.Random()
+
+    # Apply random opening plies if requested
+    for _ in range(random_openings):
+        if board.is_terminal():
+            break
+        legal = board.legal_moves()
+        if not legal:
+            break
+        board.make_move(active_rng.choice(legal))
+
+    # Play until terminal
     while not board.is_terminal():
         current_actor = player1 if board.current_player == PLAYER_1 else player2
         move = current_actor.get_move(board)
@@ -31,7 +51,8 @@ def play_game(player1: Player, player2: Player, verbose: bool = False) -> int:
 def run_matchup(
     player_a: Player,
     player_b: Player,
-    num_games: int = 20,
+    num_games: int = 100,
+    random_opening_range: Tuple[int, int] = (2, 4),
     seed: int = 42
 ) -> Dict[str, Any]:
     """
@@ -39,16 +60,18 @@ def run_matchup(
     Alternates who plays first:
     - In even games, player_a is Player 1 (plays first).
     - In odd games, player_b is Player 1 (plays first).
+    Uses randomized opening moves from random_opening_range to prevent deterministic loops.
     Returns win/draw/loss counts and rates from player_a's perspective.
     """
-    random.seed(seed)
+    rng = random.Random(seed)
     wins = 0
     draws = 0
     losses = 0
 
     for i in range(num_games):
+        k_openings = rng.randint(random_opening_range[0], random_opening_range[1]) if random_opening_range[1] > 0 else 0
         if i % 2 == 0:
-            outcome = play_game(player_a, player_b)
+            outcome = play_game(player_a, player_b, random_openings=k_openings, rng=rng)
             if outcome == 1:
                 wins += 1
             elif outcome == -1:
@@ -56,7 +79,7 @@ def run_matchup(
             else:
                 draws += 1
         else:
-            outcome = play_game(player_b, player_a)
+            outcome = play_game(player_b, player_a, random_openings=k_openings, rng=rng)
             if outcome == 1:
                 losses += 1
             elif outcome == -1:
@@ -79,11 +102,12 @@ def run_matchup(
 def run_tournament(
     agent: Player,
     opponents: List[Player],
-    num_games_per_opponent: int = 20,
+    num_games_per_opponent: int = 100,
+    random_opening_range: Tuple[int, int] = (2, 4),
     seed: int = 42
 ) -> Dict[str, Any]:
     """
-    Evaluates agent against a suite of opponents.
+    Evaluates agent against a suite of opponents with randomized openings.
     """
     matchups = {}
     total_wins = 0
@@ -92,7 +116,13 @@ def run_tournament(
     total_games = 0
 
     for opp in opponents:
-        res = run_matchup(agent, opp, num_games=num_games_per_opponent, seed=seed)
+        res = run_matchup(
+            agent,
+            opp,
+            num_games=num_games_per_opponent,
+            random_opening_range=random_opening_range,
+            seed=seed
+        )
         matchups[opp.name] = res
         total_wins += res["wins"]
         total_draws += res["draws"]

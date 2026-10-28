@@ -120,6 +120,7 @@ def main():
                 "final_round": latest_round["round"],
                 "status": latest_round.get("status", "ACCEPTED"),
                 "dev_agreement": latest_round["dev_agreement"],
+                "dev_outcome_agreement": latest_round.get("dev_outcome_agreement", latest_round["dev_agreement"]),
                 "tournament_score": latest_round.get("overall_score", 0.0),
                 "total_examples_trained": sum(r["examples_trained"] for r in round_logs),
                 "checkpoint": latest_round.get("checkpoint", "")
@@ -134,8 +135,9 @@ def main():
                     model, _ = load_checkpoint(ckpt_path)
                     player = ModelPlayer(model, greedy=True)
                     test_eval = compute_optimal_action_agreement(player, test_records)
-                    summary_entry["final_test_agreement"] = test_eval["overall_agreement"]
-                    print(f"[{cond} seed {seed}] Final Test Agreement: {test_eval['overall_agreement']:.3%}")
+                    summary_entry["final_test_strict_agreement"] = test_eval["overall_agreement"]
+                    summary_entry["final_test_outcome_agreement"] = test_eval.get("outcome_agreement", test_eval["overall_agreement"])
+                    print(f"[{cond} seed {seed}] Final Test: Strict Optimal={test_eval['overall_agreement']:.2%} | Outcome-Preserving={test_eval.get('outcome_agreement', test_eval['overall_agreement']):.2%}")
 
             all_summaries.append(summary_entry)
 
@@ -151,6 +153,16 @@ def main():
         summary_df.to_csv(summary_csv, index=False)
         print(f"\n{'='*60}\nEXPERIMENT COMPLETE. Summary Table:\n{'='*60}")
         print(summary_df.to_string(index=False))
+
+        # Multi-seed aggregate stats if > 1 seed
+        if len(seeds) > 1:
+            print(f"\n{'='*60}\nMULTI-SEED AGGREGATE SUMMARY (Mean ± Std):\n{'='*60}")
+            agg_cols = ["dev_agreement", "dev_outcome_agreement", "tournament_score"]
+            if args.final:
+                agg_cols += ["final_test_strict_agreement", "final_test_outcome_agreement"]
+            available_cols = [c for c in agg_cols if c in summary_df.columns]
+            grouped = summary_df.groupby("condition")[available_cols].agg(["mean", "std"])
+            print(grouped.to_string())
     else:
         if all_summaries:
             headers = list(all_summaries[0].keys())

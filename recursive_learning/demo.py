@@ -1,15 +1,16 @@
 """
 Interactive Presentation Demo for Task 1: Verified Self-Improvement on Connect-4.
 Features:
-1. Summary table of accepted and rejected rounds.
-2. Line chart of dev accuracy and opponent win rates across rounds.
-3. Live Head-to-Head tournament: Round 3 vs Round 0 (50-100 games) with score.
-4. The 'Convincing Moment': Prints a board state where Round 0 blunders and Round 3 plays optimal.
+1. Summary table of accepted and rejected rounds (strict optimal & outcome-preserving agreement).
+2. Dual-curve progress chart of dev agreement (fastest-win vs outcome-preserving) and 100-game opponent win rates.
+3. Live Head-to-Head tournament: Round 3 vs Round 0 with randomized openings to prevent deterministic repetition.
+4. The 'Convincing Moment': Rigorously identifies and explains true blunders vs suboptimal moves based on solver outcome values.
 """
 
 import os
 import sys
 import json
+import random
 import argparse
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
@@ -27,6 +28,7 @@ except ImportError:
 from src.game.connect4 import Connect4Board, PLAYER_1, PLAYER_2, COLS, ROWS
 from src.model.train import load_checkpoint
 from src.eval.opponents import ModelPlayer
+from src.eval.tournament import play_game
 from src.data.dataset import DatasetManager
 from src.solver.wrapper import Connect4Solver
 
@@ -39,26 +41,26 @@ def parse_args():
     return parser.parse_args()
 
 def display_summary_table(experiment_log: List[Dict[str, Any]]):
-    print("\n" + "=" * 88)
+    print("\n" + "=" * 98)
     print("1. ACCEPTED & REJECTED ROUNDS SUMMARY TABLE")
-    print("=" * 88)
-    headers = ["Round", "Status", "Dev Agree", "Prop Agree", "vs Random", "vs Heuristic", "vs Minimax", "Examples"]
-    row_fmt = "{:<7} | {:<20} | {:<9} | {:<10} | {:<9} | {:<12} | {:<10} | {:<8}"
+    print("=" * 98)
+    headers = ["Round", "Status", "Strict Agree", "Outcome Agree", "vs Random", "vs Heuristic", "vs Minimax", "Examples"]
+    row_fmt = "{:<7} | {:<18} | {:<12} | {:<13} | {:<9} | {:<12} | {:<10} | {:<8}"
     print(row_fmt.format(*headers))
-    print("-" * 88)
+    print("-" * 98)
 
     for entry in experiment_log:
         r = entry.get("round", 0)
         status = entry.get("status", "ACCEPTED" if entry.get("accepted", True) else "REJECTED")
-        agree = f"{entry.get('dev_agreement', 0.0) * 100:.1f}%"
-        prop = f"{entry.get('proposal_agreement', entry.get('dev_agreement', 0.0)) * 100:.1f}%"
+        strict = f"{entry.get('dev_agreement', 0.0) * 100:.1f}%"
+        outcome = f"{entry.get('dev_outcome_agreement', entry.get('dev_agreement', 0.0)) * 100:.1f}%"
         rnd = f"{entry.get('win_rate_random', 0.0) * 100:.0f}%"
         heu = f"{entry.get('win_rate_heuristic', 0.0) * 100:.0f}%"
         mini = f"{entry.get('win_rate_minimax', 0.0) * 100:.0f}%"
         examples = entry.get("examples_trained", 0)
-        print(row_fmt.format(f"R{r}", status, agree, prop, rnd, heu, mini, str(examples)))
+        print(row_fmt.format(f"R{r}", status, strict, outcome, rnd, heu, mini, str(examples)))
 
-    print("=" * 88 + "\n")
+    print("=" * 98 + "\n")
 
 def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path):
     if not HAS_MATPLOTLIB or len(experiment_log) < 2:
@@ -66,27 +68,30 @@ def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rounds = [entry["round"] for entry in experiment_log]
-    agreements = [entry.get("dev_agreement", 0.0) * 100 for entry in experiment_log]
+    strict_agreements = [entry.get("dev_agreement", 0.0) * 100 for entry in experiment_log]
+    outcome_agreements = [entry.get("dev_outcome_agreement", entry.get("dev_agreement", 0.0)) * 100 for entry in experiment_log]
     wr_random = [entry.get("win_rate_random", 0.0) * 100 for entry in experiment_log]
     wr_heuristic = [entry.get("win_rate_heuristic", 0.0) * 100 for entry in experiment_log]
     wr_minimax = [entry.get("win_rate_minimax", 0.0) * 100 for entry in experiment_log]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Panel 1: Dev Agreement
-    ax1.plot(rounds, agreements, marker="o", color="#2ca02c", linewidth=2.5, label="Verified Self-Improvement")
-    ax1.set_title("Optimal-Move Agreement on Unseen Positions", fontsize=12, fontweight="bold")
+    # Panel 1: Dev Agreement (Strict vs Outcome-Preserving)
+    ax1.plot(rounds, outcome_agreements, marker="s", color="#1f77b4", linewidth=2.5, linestyle="-", label="Outcome-Preserving Agreement (Win/Draw)")
+    ax1.plot(rounds, strict_agreements, marker="o", color="#2ca02c", linewidth=2.5, linestyle="--", label="Strict Optimal Agreement (Fastest Win)")
+    ax1.axhline(14.3, color="gray", linestyle=":", alpha=0.7, label="Random Guess Baseline (14.3%)")
+    ax1.set_title("Validation Agreement on Unseen Positions", fontsize=12, fontweight="bold")
     ax1.set_xlabel("Self-Improvement Round", fontsize=11)
-    ax1.set_ylabel("Agreement with Solver (%)", fontsize=11)
+    ax1.set_ylabel("Solver Agreement (%)", fontsize=11)
     ax1.set_xticks(rounds)
     ax1.grid(True, linestyle="--", alpha=0.6)
     ax1.legend(loc="lower right")
 
-    # Panel 2: Win rates vs opponents
-    ax2.plot(rounds, wr_random, marker="s", color="#1f77b4", linewidth=2, label="vs Random")
+    # Panel 2: Win rates vs opponents (randomized openings)
+    ax2.plot(rounds, wr_random, marker="o", color="#2ca02c", linewidth=2, label="vs Random")
     ax2.plot(rounds, wr_heuristic, marker="^", color="#ff7f0e", linewidth=2, label="vs Heuristic")
     ax2.plot(rounds, wr_minimax, marker="d", color="#d62728", linewidth=2, label="vs Minimax (d=2)")
-    ax2.set_title("Win Rates Across Self-Improvement Rounds", fontsize=12, fontweight="bold")
+    ax2.set_title("Win Rates (Randomized Openings, 100 Games)", fontsize=12, fontweight="bold")
     ax2.set_xlabel("Self-Improvement Round", fontsize=11)
     ax2.set_ylabel("Win Rate (%)", fontsize=11)
     ax2.set_xticks(rounds)
@@ -98,9 +103,9 @@ def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path
     plt.close(fig)
     print(f" [Chart] Saved progress figure to: {output_path}")
 
-def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[str, Any]:
+def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50, seed: int = 42) -> Dict[str, Any]:
     print("\n" + "=" * 80)
-    print(f"⚔️  2. LIVE HEAD-TO-HEAD MATCH: Round 3 vs Round 0 ({num_games} Games)")
+    print(f"⚔️  2. LIVE HEAD-TO-HEAD MATCH: Round 3 vs Round 0 ({num_games} Games with Randomized Openings)")
     print("=" * 80)
 
     if not r0_path.exists() or not r3_path.exists():
@@ -113,30 +118,29 @@ def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[
     p0 = ModelPlayer(m0, greedy=True, name="Round_0_Baseline")
     p3 = ModelPlayer(m3, greedy=True, name="Round_3_Improved")
 
+    rng = random.Random(seed)
     r3_wins = 0
     r0_wins = 0
     draws = 0
 
     for i in range(num_games):
-        # Alternate sides: even games R3 is Player 1 (Red), odd games R0 is Player 1
-        board = Connect4Board()
+        k_openings = rng.randint(2, 4)
         if i % 2 == 0:
-            player_map = {PLAYER_1: p3, PLAYER_2: p0}
+            outcome = play_game(p3, p0, random_openings=k_openings, rng=rng)
+            if outcome == 1:
+                r3_wins += 1
+            elif outcome == -1:
+                r0_wins += 1
+            else:
+                draws += 1
         else:
-            player_map = {PLAYER_1: p0, PLAYER_2: p3}
-
-        while not board.is_terminal():
-            active_player = player_map[board.current_player]
-            move = active_player.get_move(board)
-            board.make_move(move)
-
-        winner = board.winner()
-        if winner is None or winner == 0:
-            draws += 1
-        elif player_map.get(winner) == p3:
-            r3_wins += 1
-        else:
-            r0_wins += 1
+            outcome = play_game(p0, p3, random_openings=k_openings, rng=rng)
+            if outcome == 1:
+                r0_wins += 1
+            elif outcome == -1:
+                r3_wins += 1
+            else:
+                draws += 1
 
     r3_pct = (r3_wins / num_games) * 100
     r0_pct = (r0_wins / num_games) * 100
@@ -151,7 +155,7 @@ def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[
 
 def find_convincing_blunder(r0_path: Path, r3_path: Path, data_dir: str = "data"):
     print("=" * 80)
-    print("🔍 3. THE CONVINCING MOMENT: ROUND 0 BLUNDER VS ROUND 3 OPTIMAL MOVE")
+    print("🔍 3. THE CONVINCING MOMENT: ROUND 0 MISTAKE VS ROUND 3 OPTIMAL MOVE")
     print("=" * 80)
 
     if not r0_path.exists() or not r3_path.exists():
@@ -168,53 +172,58 @@ def find_convincing_blunder(r0_path: Path, r3_path: Path, data_dir: str = "data"
     p0 = ModelPlayer(m0, greedy=True)
     p3 = ModelPlayer(m3, greedy=True)
 
-    found_position = None
+    critical_blunder = None
+    suboptimal_move = None
 
-    for rec in dev_records:
+    candidate_records = dev_records + dm.load_train()
+
+    for rec in candidate_records:
         board = Connect4Board(grid=np.array(rec["grid"], dtype=np.int8), current_player=rec["current_player"])
         opts = rec.get("optimal_moves", [])
-        if not opts:
+        scores_raw = rec.get("scores", {})
+        if not opts or not scores_raw:
             continue
 
+        scores = {int(k): int(v) for k, v in scores_raw.items()}
         c0 = p0.get_move(board)
         c3 = p3.get_move(board)
 
-        # Condition: R3 chooses optimal move, R0 makes a blunder (non-optimal)
         if c3 in opts and c0 not in opts:
-            found_position = (board, c0, c3, opts, rec.get("scores", {}))
-            break
+            s0 = scores.get(c0, -999)
+            s3 = scores.get(c3, -999)
 
-    if found_position is None:
-        # Fallback to train records if not found in dev
-        train_records = dm.load_train()
-        for rec in train_records:
-            board = Connect4Board(grid=np.array(rec["grid"], dtype=np.int8), current_player=rec["current_player"])
-            opts = rec.get("optimal_moves", [])
-            if not opts:
-                continue
-            c0 = p0.get_move(board)
-            c3 = p3.get_move(board)
-            if c3 in opts and c0 not in opts:
-                found_position = (board, c0, c3, opts, rec.get("scores", {}))
+            # Check if Round 0 committed a critical outcome-flipping blunder:
+            # Optimal move preserves win/draw (s3 >= 0), but R0 blundered into a loss (s0 < 0)
+            if s3 >= 0 and s0 < 0:
+                critical_blunder = (board, c0, c3, opts, scores, s0, s3, "CRITICAL BLUNDER")
                 break
+            elif suboptimal_move is None and s0 < s3:
+                category = "SUBOPTIMAL (SLOWER WIN)" if s0 > 0 else "SUBOPTIMAL DEFENSE (FASTER LOSS)"
+                suboptimal_move = (board, c0, c3, opts, scores, s0, s3, category)
 
-    if found_position is None:
-        print("Note: Both models chose identical moves on the examined positions.")
+    chosen_example = critical_blunder if critical_blunder is not None else suboptimal_move
+
+    if chosen_example is None:
+        print("Note: Both models made identical outcome decisions on all candidate positions.")
         return
 
-    board, c0, c3, opts, scores = found_position
+    board, c0, c3, opts, scores, s0, s3, label = chosen_example
     curr = "RED (Player 1)" if board.current_player == PLAYER_1 else "YELLOW (Player 2)"
 
+    print(f"Classification:         [{label}]")
     print(f"Position Active Player: {curr}")
-    print(f"Solver Optimal Move(s): {opts}")
+    print(f"Solver Optimal Move(s): {opts} (Score: {s3:+d})")
     print(f"Solver Column Scores:   {scores}\n")
     print("--- BOARD STATE ---")
     print(board)
     print("  0 1 2 3 4 5 6   <-- Columns\n")
-    print(f"❌ Round 0 (Baseline) played:  Column {c0}  [TACTICAL BLUNDER]")
-    print(f"✅ Round 3 (Improved) played:  Column {c3}  [SOLVER-OPTIMAL MOVE]")
-    print("\nInsight: Round 0 falls for a tactical trap or misses an immediate threat,")
-    print("whereas Round 3's solver-verified training correctly identified the optimal column.")
+    print(f"❌ Round 0 (Baseline) played:  Column {c0}  (Score: {s0:+d}) -> {label}")
+    print(f"✅ Round 3 (Improved) played:  Column {c3}  (Score: {s3:+d}) -> SOLVER OPTIMAL")
+    print(f"\nAnalysis: Round 3 chooses the mathematically optimal line (score {s3:+d}),")
+    if s3 >= 0 and s0 < 0:
+        print(f"while Round 0's move (column {c0}) directly forfeits the position into a loss (score {s0:+d}).")
+    else:
+        print(f"while Round 0's move (column {c0}) is suboptimal by {s3 - s0} game plies.")
     print("=" * 80 + "\n")
 
 def main():
@@ -250,17 +259,16 @@ def main():
                 if alt.exists():
                     c3 = alt
                     break
-
-        if c0.exists() and r0_ckpt is None:
+        if c0 and c0.exists() and (not r0_ckpt or not r0_ckpt.exists()):
             r0_ckpt = c0
-        if c3 and c3.exists() and r3_ckpt is None:
+        if c3 and c3.exists() and (not r3_ckpt or not r3_ckpt.exists()):
             r3_ckpt = c3
 
     if r0_ckpt and r3_ckpt:
         run_head_to_head(r0_ckpt, r3_ckpt, num_games=args.num_games)
         find_convincing_blunder(r0_ckpt, r3_ckpt, data_dir=args.data_dir)
     else:
-        print("Note: Run training to produce checkpoints before running head-to-head match.")
+        print(f"Checkpoints not found in {res_base}. Checked {r0_ckpt} and {r3_ckpt}.")
 
 if __name__ == "__main__":
     main()

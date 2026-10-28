@@ -99,10 +99,17 @@ class SelfImprovementEngine:
             HeuristicPlayer(),
             MinimaxPlayer(depth=2)
         ]
-        tournament_metrics = run_tournament(agent_player, opponents, num_games_per_opponent=10, seed=self.seed)
+        tournament_metrics = run_tournament(
+            agent_player,
+            opponents,
+            num_games_per_opponent=100,
+            random_opening_range=(2, 4),
+            seed=self.seed
+        )
 
         return {
             "dev_agreement": agreement_metrics["overall_agreement"],
+            "dev_outcome_agreement": agreement_metrics.get("outcome_agreement", agreement_metrics["overall_agreement"]),
             "agreement_details": agreement_metrics,
             "tournament": tournament_metrics
         }
@@ -218,6 +225,7 @@ class SelfImprovementEngine:
                 "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "dev_agreement": eval_res["dev_agreement"],
+                "dev_outcome_agreement": eval_res.get("dev_outcome_agreement", eval_res["dev_agreement"]),
                 "overall_score": eval_res["tournament"]["overall_score"],
                 "win_rate_random": self._extract_win_rate(tourney, "random"),
                 "win_rate_heuristic": self._extract_win_rate(tourney, "heuristic"),
@@ -325,6 +333,7 @@ class SelfImprovementEngine:
                 "accepted": is_accepted,
                 "status": "ACCEPTED" if is_accepted else "REJECTED_ROLLED_BACK",
                 "dev_agreement": new_agreement if is_accepted else prev_agreement,
+                "dev_outcome_agreement": proposal_eval.get("dev_outcome_agreement", new_agreement) if is_accepted else current_eval.get("dev_outcome_agreement", prev_agreement),
                 "proposal_agreement": new_agreement,
                 "previous_agreement": prev_agreement,
                 "overall_score": new_score if is_accepted else prev_score,
