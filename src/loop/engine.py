@@ -172,15 +172,24 @@ class SelfImprovementEngine:
         # Check existing completed rounds
         completed_rounds = {entry["round"]: entry for entry in self.experiment_log}
 
+        # Experience Replay Buffer: maintains foundational knowledge while assimilating new verified practice
+        replay_buf_path = self.output_dir / "replay_buffer.json"
+        if replay_buf_path.exists():
+            with open(replay_buf_path, "r", encoding="utf-8") as f:
+                cumulative_train = json.load(f)
+        else:
+            rng = random.Random(self.seed)
+            initial_train = rng.sample(train_pool, min(self.examples_per_round, len(train_pool)))
+            cumulative_train = list(initial_train)
+
         # ---------------- Round 0: Initial Baseline ----------------
         if 0 not in completed_rounds:
             print(f"[{self.condition}] Running Round 0: Initial baseline training...")
-            # Sample initial dataset
-            rng = random.Random(self.seed)
-            initial_train = rng.sample(train_pool, min(self.examples_per_round, len(train_pool)))
+            with open(replay_buf_path, "w", encoding="utf-8") as f:
+                json.dump(cumulative_train, f)
 
             model, train_hist = train_model(
-                train_records=initial_train,
+                train_records=cumulative_train,
                 dev_records=dev_records,
                 epochs=self.epochs_per_round,
                 batch_size=self.batch_size,
@@ -197,12 +206,12 @@ class SelfImprovementEngine:
                 "round": 0,
                 "condition": self.condition,
                 "status": "ACCEPTED_BASELINE",
-                "examples_trained": len(initial_train),
+                "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "dev_agreement": eval_res["dev_agreement"],
                 "overall_score": eval_res["tournament"]["overall_score"],
                 "checkpoint": str(ckpt_path),
-                "diversity": compute_diversity(initial_train)
+                "diversity": compute_diversity(cumulative_train)
             }
             self.experiment_log.append(r0_entry)
             self._save_log()
@@ -258,13 +267,18 @@ class SelfImprovementEngine:
                         "num_pieces": p["num_pieces"]
                     })
 
+            # Append new practice experiences to replay buffer (prevents catastrophic forgetting)
+            cumulative_train.extend(round_records)
+            with open(replay_buf_path, "w", encoding="utf-8") as f:
+                json.dump(cumulative_train, f)
+
             # Diversity measurement of the round's dataset
             round_diversity = compute_diversity(round_records)
 
-            # 2. Train proposal model on collected examples
+            # 2. Train proposal model on cumulative experiences
             # Start from current accepted checkpoint weights
             proposal_model, train_hist = train_model(
-                train_records=round_records,
+                train_records=cumulative_train,
                 dev_records=dev_records,
                 epochs=self.epochs_per_round,
                 batch_size=self.batch_size,
@@ -292,7 +306,7 @@ class SelfImprovementEngine:
                 "proposal_agreement": new_agreement,
                 "previous_agreement": prev_agreement,
                 "overall_score": proposal_eval["tournament"]["overall_score"],
-                "examples_trained": len(round_records),
+                "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "diversity": round_diversity
             }
