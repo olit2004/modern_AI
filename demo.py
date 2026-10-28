@@ -40,7 +40,7 @@ def parse_args():
 
 def display_summary_table(experiment_log: List[Dict[str, Any]]):
     print("\n" + "=" * 88)
-    print("📊 1. ACCEPTED & REJECTED ROUNDS SUMMARY TABLE")
+    print("1. ACCEPTED & REJECTED ROUNDS SUMMARY TABLE")
     print("=" * 88)
     headers = ["Round", "Status", "Dev Agree", "Prop Agree", "vs Random", "vs Heuristic", "vs Minimax", "Examples"]
     row_fmt = "{:<7} | {:<20} | {:<9} | {:<10} | {:<9} | {:<12} | {:<10} | {:<8}"
@@ -96,7 +96,7 @@ def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path
     plt.tight_layout()
     fig.savefig(output_path, dpi=200)
     plt.close(fig)
-    print(f"📈 [Chart] Saved progress figure to: {output_path}")
+    print(f" [Chart] Saved progress figure to: {output_path}")
 
 def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[str, Any]:
     print("\n" + "=" * 80)
@@ -142,9 +142,9 @@ def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[
     r0_pct = (r0_wins / num_games) * 100
     draw_pct = (draws / num_games) * 100
 
-    print(f"  🏆 Round 3 (Improved): {r3_wins:>3} wins ({r3_pct:5.1f}%)")
-    print(f"  📉 Round 0 (Baseline): {r0_wins:>3} wins ({r0_pct:5.1f}%)")
-    print(f"  🤝 Draws:              {draws:>3}      ({draw_pct:5.1f}%)")
+    print(f"  Round 3 (Improved): {r3_wins:>3} wins ({r3_pct:5.1f}%)")
+    print(f"  Round 0 (Baseline): {r0_wins:>3} wins ({r0_pct:5.1f}%)")
+    print(f"  Draws:              {draws:>3}      ({draw_pct:5.1f}%)")
     print("=" * 80 + "\n")
 
     return {"r3_wins": r3_wins, "r0_wins": r0_wins, "draws": draws}
@@ -171,7 +171,7 @@ def find_convincing_blunder(r0_path: Path, r3_path: Path, data_dir: str = "data"
     found_position = None
 
     for rec in dev_records:
-        board = Connect4Board(grid=rec["grid"], current_player=rec["current_player"])
+        board = Connect4Board(grid=np.array(rec["grid"], dtype=np.int8), current_player=rec["current_player"])
         opts = rec.get("optimal_moves", [])
         if not opts:
             continue
@@ -185,7 +185,21 @@ def find_convincing_blunder(r0_path: Path, r3_path: Path, data_dir: str = "data"
             break
 
     if found_position is None:
-        print("No contrasting blunder found in dev samples.")
+        # Fallback to train records if not found in dev
+        train_records = dm.load_train()
+        for rec in train_records:
+            board = Connect4Board(grid=np.array(rec["grid"], dtype=np.int8), current_player=rec["current_player"])
+            opts = rec.get("optimal_moves", [])
+            if not opts:
+                continue
+            c0 = p0.get_move(board)
+            c3 = p3.get_move(board)
+            if c3 in opts and c0 not in opts:
+                found_position = (board, c0, c3, opts, rec.get("scores", {}))
+                break
+
+    if found_position is None:
+        print("Note: Both models chose identical moves on the examined positions.")
         return
 
     board, c0, c3, opts, scores = found_position

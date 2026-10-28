@@ -32,7 +32,7 @@ class Connect4Board:
         if grid is None:
             self.grid = np.zeros((ROWS, COLS), dtype=np.int8)
         else:
-            self.grid = grid.astype(np.int8).copy()
+            self.grid = np.array(grid, dtype=np.int8).copy()
         self.current_player = current_player
         self.move_history: List[int] = list(move_history) if move_history is not None else []
         self._winner: Optional[int] = None
