@@ -14,15 +14,17 @@ from src.model.train import load_checkpoint
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Inspect Teacher Models for Distillation")
-    parser.add_argument("--baseline", type=str, default="results/teachers/teacher_round0_baseline.pt", help="Baseline teacher checkpoint")
-    parser.add_argument("--improved", type=str, default="results/teachers/teacher_round3_improved.pt", help="Improved teacher checkpoint")
+    parser.add_argument("--results_dir", type=str, default="results", help="Directory containing experiment results and teachers")
+    parser.add_argument("--baseline", type=str, default=None, help="Baseline teacher checkpoint")
+    parser.add_argument("--improved", type=str, default=None, help="Improved teacher checkpoint")
     parser.add_argument("--moves", type=str, default="3324", help="Sequence of 0-indexed column moves to test (e.g. '3324')")
     return parser.parse_args()
 
 def main():
     args = parse_args()
-    b_path = Path(args.baseline)
-    i_path = Path(args.improved)
+    res_dir = Path(args.results_dir)
+    b_path = Path(args.baseline) if args.baseline else (res_dir / "teachers" / "teacher_round0_baseline.pt")
+    i_path = Path(args.improved) if args.improved else (res_dir / "teachers" / "teacher_round3_improved.pt")
 
     print("=" * 65)
     print("TASK 3 DISTILLATION TEACHER INSPECTOR")

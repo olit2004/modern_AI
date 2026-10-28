@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate Analysis, Plots, and Report")
     parser.add_argument("--results_dir", type=str, default="results", help="Directory containing experiment results")
-    parser.add_argument("--out_fig_dir", type=str, default="results/figures", help="Directory to save figures")
+    parser.add_argument("--out_fig_dir", type=str, default=None, help="Directory to save figures (defaults to <results_dir>/figures)")
     return parser.parse_args()
 
 def plot_agreement_curves(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
@@ -163,7 +163,7 @@ This experiment investigates whether autonomous self-play practice yields genuin
 def main():
     args = parse_args()
     res_dir = Path(args.results_dir)
-    fig_dir = Path(args.out_fig_dir)
+    fig_dir = Path(args.out_fig_dir) if args.out_fig_dir else (res_dir / "figures")
     fig_dir.mkdir(parents=True, exist_ok=True)
 
     # Collect experiment metrics across directories
