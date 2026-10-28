@@ -112,81 +112,9 @@ if torch is not None:
                 p_legal = p_legal / p_legal.sum()
                 return int(np.random.choice(legal, p=p_legal))
 
-    class Connect4StudentNet(nn.Module):
-        """
-        Lightweight Student Network for Knowledge Distillation (Track B).
-        ~20x smaller parameter count and significantly lower CPU latency than teacher.
-        Input: (B, 2, 6, 7)
-        Output: (B, 7) column logits
-        """
-
-        def __init__(self, num_filters: int = 16, hidden_dim: int = 32):
-            super().__init__()
-            self.conv1 = nn.Conv2d(2, num_filters, kernel_size=3, padding=1)
-            self.bn1 = nn.BatchNorm2d(num_filters)
-            flatten_dim = num_filters * ROWS * COLS
-            self.fc1 = nn.Linear(flatten_dim, hidden_dim)
-            self.fc2 = nn.Linear(hidden_dim, COLS)
-
-        def forward(self, x: "torch.Tensor", legal_mask: Optional["torch.Tensor"] = None) -> "torch.Tensor":
-            out = F.relu(self.bn1(self.conv1(x)))
-            out = out.reshape(out.size(0), -1)
-            out = F.relu(self.fc1(out))
-            logits = self.fc2(out)
-
-            if legal_mask is not None:
-                mask_bool = legal_mask.bool()
-                large_neg = torch.tensor(-1e9, device=logits.device, dtype=logits.dtype)
-                logits = torch.where(mask_bool, logits, large_neg)
-            return logits
-
-        @torch.no_grad()
-        def predict_distribution(self, board: Connect4Board, temperature: float = 1.0) -> np.ndarray:
-            self.eval()
-            device = next(self.parameters()).device
-            tensor_np = board.to_tensor_encoding()
-            x = torch.from_numpy(tensor_np).unsqueeze(0).to(device)
-
-            legal = board.legal_moves()
-            mask_np = np.zeros(COLS, dtype=np.float32)
-            for c in legal:
-                mask_np[c] = 1.0
-            legal_mask = torch.from_numpy(mask_np).unsqueeze(0).to(device)
-
-            logits = self.forward(x, legal_mask=legal_mask)
-            if temperature > 0:
-                probs = F.softmax(logits / temperature, dim=-1).squeeze(0).cpu().numpy()
-            else:
-                probs = np.zeros(COLS, dtype=np.float32)
-                best_col = int(torch.argmax(logits, dim=-1).item())
-                probs[best_col] = 1.0
-
-            legal_sum = float(probs[legal].sum())
-            if legal_sum > 0:
-                probs[legal] = probs[legal] / legal_sum
-            return probs
-
-        @torch.no_grad()
-        def select_action(self, board: Connect4Board, greedy: bool = True, temperature: float = 1.0) -> int:
-            probs = self.predict_distribution(board, temperature=temperature if not greedy else 0.0)
-            legal = board.legal_moves()
-            if not legal:
-                raise ValueError("No legal moves available.")
-            if greedy:
-                legal_probs = [(probs[c], c) for c in legal]
-                return max(legal_probs, key=lambda p: p[0])[1]
-            else:
-                p_legal = probs[legal]
-                p_legal = p_legal / p_legal.sum()
-                return int(np.random.choice(legal, p=p_legal))
-
 else:
     class Connect4Net:
         """Stub when PyTorch is not installed."""
         def __init__(self, *args, **kwargs):
             raise ImportError("PyTorch is required for Connect4Net.")
 
-    class Connect4StudentNet:
-        """Stub when PyTorch is not installed."""
-        def __init__(self, *args, **kwargs):
-            raise ImportError("PyTorch is required for Connect4StudentNet.")

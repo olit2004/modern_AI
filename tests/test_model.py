@@ -59,20 +59,3 @@ def test_save_and_load_checkpoint():
     finally:
         if os.path.exists(path):
             os.remove(path)
-
-@pytest.mark.skipif(not TORCH_AVAILABLE, reason="PyTorch is required for model tests")
-def test_student_net_forward_and_params():
-    from src.model.net import Connect4Net, Connect4StudentNet
-    teacher = Connect4Net()
-    student = Connect4StudentNet()
-
-    teacher_params = sum(p.numel() for p in teacher.parameters())
-    student_params = sum(p.numel() for p in student.parameters())
-
-    assert student_params < teacher_params // 10, "Student should be at least 10x smaller than teacher"
-
-    b = Connect4Board()
-    b.make_move(3)
-    probs = student.predict_distribution(b)
-    assert len(probs) == 7
-    assert np.isclose(probs.sum(), 1.0)

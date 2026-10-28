@@ -27,9 +27,10 @@ class Connect4Solver:
     Uses SQLite cache to ensure expensive positions are solved at most once.
     """
 
-    def __init__(self, cache_path: Optional[str] = None, use_weak: bool = False):
+    def __init__(self, cache_path: Optional[str] = None, use_weak: bool = False, require_cpp: bool = False):
         self.use_weak = use_weak
         self.fallback_solver = PythonFallbackSolver()
+        self.require_cpp = require_cpp
 
         if cache_path is None:
             cache_dir = Path("results/cache")
@@ -41,6 +42,18 @@ class Connect4Solver:
 
         self._init_cache()
         self.cpp_available = self._ensure_binary()
+
+        # Transparent solver reporting
+        if self.cpp_available:
+            book_status = "with 7x6 opening book" if BOOK_PATH.exists() else "without book"
+            print(f"[Solver Engine] ACTIVE: Pascal Pons C++ Bitboard Solver (c4solver, {book_status})")
+        else:
+            msg = "[Solver Engine] WARNING: Pascal Pons C++ binary not available. Using Python Fallback Solver (depth-6 approximate search)."
+            if self.require_cpp:
+                raise RuntimeError(
+                    f"{msg}\nC++ solver required! Please build src/solver/cpp/pons (run `make -C src/solver/cpp/pons`)."
+                )
+            print(msg)
 
     def _init_cache(self):
         """Initialize SQLite database for cached evaluations."""

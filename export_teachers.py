@@ -25,6 +25,12 @@ def main():
     export_dir.mkdir(parents=True, exist_ok=True)
 
     exp_folder = res_dir / f"{args.best_condition}_seed{args.seed}"
+    if not exp_folder.exists():
+        for alt in [res_dir / f"verified_seed{args.seed}", res_dir / f"v3_verified_seed{args.seed}"]:
+            if alt.exists():
+                exp_folder = alt
+                break
+
     r0_ckpt = exp_folder / "checkpoint_round_0.pt"
     r3_ckpt = exp_folder / "checkpoint_round_3.pt"
 

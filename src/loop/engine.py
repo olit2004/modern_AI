@@ -38,25 +38,24 @@ class SelfImprovementEngine:
 
     def __init__(
         self,
-        condition: str,
-        output_dir: str,
-        solver: Connect4Solver,
-        dataset_manager: DatasetManager,
+        condition: str = "verified",
+        output_dir: str = "results",
+        solver: Optional[Connect4Solver] = None,
+        dataset_manager: Optional[DatasetManager] = None,
         seed: int = 42,
         num_rounds: int = 3,
         examples_per_round: int = 400,
         epochs_per_round: int = 5,
         batch_size: int = 32,
-        acceptance_tolerance: float = 0.02,
+        acceptance_tolerance: float = 0.0, # 0.0 means STRICT improvement required
         temperature: float = 0.8,
         learning_rate: float = 1e-3
     ):
-        assert condition in ["v1_fixed", "v2_unverified", "v3_verified"], f"Unknown condition {condition}"
-        self.condition = condition
+        self.condition = "verified" if condition in ["verified", "v3_verified"] else condition
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.solver = solver
-        self.dataset_manager = dataset_manager
+        self.solver = solver if solver is not None else Connect4Solver()
+        self.dataset_manager = dataset_manager if dataset_manager is not None else DatasetManager()
         self.seed = seed
         self.num_rounds = num_rounds
         self.examples_per_round = examples_per_round
@@ -202,14 +201,19 @@ class SelfImprovementEngine:
             ckpt_path = self.output_dir / "checkpoint_round_0.pt"
             save_checkpoint(model, None, train_hist["total_steps"], 0, eval_res, str(ckpt_path))
 
+            tourney = eval_res["tournament"]["opponents"]
             r0_entry = {
                 "round": 0,
                 "condition": self.condition,
+                "accepted": True,
                 "status": "ACCEPTED_BASELINE",
                 "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "dev_agreement": eval_res["dev_agreement"],
                 "overall_score": eval_res["tournament"]["overall_score"],
+                "win_rate_random": tourney.get("Random", {}).get("win_rate", 0.0),
+                "win_rate_heuristic": tourney.get("Heuristic", {}).get("win_rate", 0.0),
+                "win_rate_minimax": tourney.get("Minimax_d2", {}).get("win_rate", 0.0),
                 "checkpoint": str(ckpt_path),
                 "diversity": compute_diversity(cumulative_train)
             }
@@ -234,11 +238,11 @@ class SelfImprovementEngine:
             print(f"[{self.condition}] Starting Round {r}...")
             # 1. Practice & data collection
             if self.condition == "v1_fixed":
-                # Version 1: sample next slice from fixed dataset (no practice rounds)
+                # Version 1 control: sample next slice from fixed dataset (no practice rounds)
                 rng = random.Random(self.seed + r)
                 round_records = rng.sample(train_pool, min(self.examples_per_round, len(train_pool)))
             elif self.condition == "v2_unverified":
-                # Version 2: practice games, learn from own moves WITHOUT solver verification
+                # Version 2 control: practice games, learn from own moves WITHOUT solver verification
                 raw_positions = self.collect_self_play_positions(current_model, self.examples_per_round)
                 round_records = []
                 for p in raw_positions:
@@ -250,8 +254,8 @@ class SelfImprovementEngine:
                         "optimal_moves": [p["chosen_action"]], # Self-label
                         "num_pieces": p["num_pieces"]
                     })
-            elif self.condition == "v3_verified":
-                # Version 3: practice games, VERIFIED and labeled by solver referee
+            else:
+                # Primary Track 1 Verified Loop: practice games, VERIFIED and labeled by solver referee
                 raw_positions = self.collect_self_play_positions(current_model, self.examples_per_round)
                 boards_to_label = [p["board_obj"] for p in raw_positions]
                 eval_results = self.solver.evaluate_batch(boards_to_label)
@@ -288,14 +292,14 @@ class SelfImprovementEngine:
                 init_model=current_model
             )
 
-            # 3. Evaluate proposal on dev set
+            # 3. Evaluate proposal on dev set and opponents
             proposal_eval = self.evaluate_model(proposal_model, dev_records, round_num=r)
             prev_agreement = self.experiment_log[-1]["dev_agreement"]
             new_agreement = proposal_eval["dev_agreement"]
+            prop_tourney = proposal_eval["tournament"]["opponents"]
 
-            # 4. Acceptance Gate
-            # Accept if performance meets threshold, otherwise reject and rollback
-            is_accepted = (new_agreement >= prev_agreement - self.acceptance_tolerance)
+            # 4. Strict Acceptance Gate: must strictly improve over previous round
+            is_accepted = (new_agreement > prev_agreement)
 
             round_entry = {
                 "round": r,
@@ -305,7 +309,10 @@ class SelfImprovementEngine:
                 "dev_agreement": new_agreement if is_accepted else prev_agreement,
                 "proposal_agreement": new_agreement,
                 "previous_agreement": prev_agreement,
-                "overall_score": proposal_eval["tournament"]["overall_score"],
+                "overall_score": proposal_eval["tournament"]["overall_score"] if is_accepted else current_eval["tournament"]["overall_score"],
+                "win_rate_random": prop_tourney.get("Random", {}).get("win_rate", 0.0),
+                "win_rate_heuristic": prop_tourney.get("Heuristic", {}).get("win_rate", 0.0),
+                "win_rate_minimax": prop_tourney.get("Minimax_d2", {}).get("win_rate", 0.0),
                 "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "diversity": round_diversity
@@ -313,18 +320,20 @@ class SelfImprovementEngine:
 
             if is_accepted:
                 current_model = proposal_model
+                current_eval = proposal_eval
                 ckpt_path = self.output_dir / f"checkpoint_round_{r}.pt"
                 save_checkpoint(current_model, None, train_hist["total_steps"], r, proposal_eval, str(ckpt_path))
                 round_entry["checkpoint"] = str(ckpt_path)
-                print(f"[{self.condition}] Round {r} ACCEPTED. Dev agreement: {new_agreement:.3f} (prev: {prev_agreement:.3f})")
+                print(f"[{self.condition}] Round {r} STRICTLY ACCEPTED! Dev agreement: {new_agreement:.3f} (prev: {prev_agreement:.3f})")
             else:
-                # Rollback: save current_model as round checkpoint so resume works cleanly
+                # Rollback: keep current_model as active and save checkpoint
                 ckpt_path = self.output_dir / f"checkpoint_round_{r}.pt"
                 save_checkpoint(current_model, None, train_hist["total_steps"], r, current_eval, str(ckpt_path))
                 round_entry["checkpoint"] = str(ckpt_path)
-                print(f"[{self.condition}] Round {r} REJECTED and ROLLED BACK. Proposal agreement: {new_agreement:.3f} < threshold.")
+                print(f"[{self.condition}] Round {r} REJECTED and ROLLED BACK. Proposal {new_agreement:.3f} <= prev {prev_agreement:.3f}")
 
             self.experiment_log.append(round_entry)
             self._save_log()
+
 
         return self.experiment_log

@@ -22,14 +22,15 @@ from src.eval.metrics import compute_optimal_action_agreement
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Connect-4 Self-Improvement Experiment Runner")
-    parser.add_argument("--config", type=str, default="configs/v3_verified.yaml", help="Path to config YAML or JSON")
+    parser.add_argument("--config", type=str, default="configs/self_learning.yaml", help="Path to config YAML or JSON")
     parser.add_argument("--out", type=str, default=None, help="Output directory (auto-detected if None)")
-    parser.add_argument("--condition", type=str, default=None, choices=["v1_fixed", "v2_unverified", "v3_verified", "all"], help="Override condition")
+    parser.add_argument("--condition", type=str, default=None, choices=["verified", "v1_fixed", "v2_unverified", "v3_verified", "all"], help="Override condition")
     parser.add_argument("--seeds", type=int, nargs="+", default=None, help="Override list of random seeds")
     parser.add_argument("--data_dir", type=str, default="data", help="Directory for datasets")
     parser.add_argument("--prepare_data", action="store_true", help="Generate and split dataset if missing")
     parser.add_argument("--final", action="store_true", help="Authorize evaluation on locked final test set")
     parser.add_argument("--clean", action="store_true", help="Wipe existing results directory and start fresh")
+    parser.add_argument("--require_cpp", action="store_true", help="Fail loudly if Pascal Pons C++ solver binary is missing")
     return parser.parse_args()
 
 def ensure_datasets(data_dir: Path, solver: Connect4Solver, seed: int = 42):
@@ -79,7 +80,7 @@ def main():
 
     # Initialize Solver & Cache
     cache_path = out_base / "cache" / "solver_labels.sqlite"
-    solver = Connect4Solver(cache_path=str(cache_path))
+    solver = Connect4Solver(cache_path=str(cache_path), require_cpp=args.require_cpp)
 
     # Initialize Dataset
     data_dir = Path(args.data_dir)
