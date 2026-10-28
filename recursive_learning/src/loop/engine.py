@@ -212,6 +212,12 @@ class SelfImprovementEngine:
                 round_num=0
             )
 
+            # Compute baseline reference numbers for context
+            random_eval = compute_optimal_action_agreement(RandomPlayer(seed=self.seed), dev_records)
+            heuristic_eval = compute_optimal_action_agreement(HeuristicPlayer(), dev_records)
+            print(f"[Reference] Random Player Dev: Strict={random_eval['overall_agreement']:.2%} | Outcome={random_eval['outcome_agreement']:.2%}")
+            print(f"[Reference] Heuristic Player Dev: Strict={heuristic_eval['overall_agreement']:.2%} | Outcome={heuristic_eval['outcome_agreement']:.2%}")
+
             eval_res = self.evaluate_model(model, dev_records, round_num=0)
             ckpt_path = self.output_dir / "checkpoint_round_0.pt"
             save_checkpoint(model, None, train_hist["total_steps"], 0, eval_res, str(ckpt_path))
@@ -226,6 +232,10 @@ class SelfImprovementEngine:
                 "total_steps": train_hist["total_steps"],
                 "dev_agreement": eval_res["dev_agreement"],
                 "dev_outcome_agreement": eval_res.get("dev_outcome_agreement", eval_res["dev_agreement"]),
+                "baseline_random_strict": random_eval["overall_agreement"],
+                "baseline_random_outcome": random_eval["outcome_agreement"],
+                "baseline_heuristic_strict": heuristic_eval["overall_agreement"],
+                "baseline_heuristic_outcome": heuristic_eval["outcome_agreement"],
                 "overall_score": eval_res["tournament"]["overall_score"],
                 "win_rate_random": self._extract_win_rate(tourney, "random"),
                 "win_rate_heuristic": self._extract_win_rate(tourney, "heuristic"),
@@ -272,20 +282,40 @@ class SelfImprovementEngine:
                     })
             else:
                 # Primary Track 1 Verified Loop: practice games, VERIFIED and labeled by solver referee
-                raw_positions = self.collect_self_play_positions(current_model, self.examples_per_round)
+                # Mistake-focused active learning: generate larger candidate pool and prioritize positions where model made errors
+                target_candidates = int(self.examples_per_round * 2)
+                raw_positions = self.collect_self_play_positions(current_model, target_candidates)
                 boards_to_label = [p["board_obj"] for p in raw_positions]
                 eval_results = self.solver.evaluate_batch(boards_to_label)
 
-                round_records = []
+                mistake_records = []
+                optimal_records = []
+
                 for p, (scores, opts) in zip(raw_positions, eval_results):
-                    round_records.append({
+                    rec = {
                         "grid": p["grid"],
                         "current_player": p["current_player"],
                         "canonical_hash": p["canonical_hash"],
                         "scores": {str(k): v for k, v in scores.items()},
-                        "optimal_moves": sorted(list(opts)), # Solver verified labels!
-                        "num_pieces": p["num_pieces"]
-                    })
+                        "optimal_moves": sorted(list(opts)),
+                        "num_pieces": p["num_pieces"],
+                        "chosen_action": p["chosen_action"]
+                    }
+                    if p["chosen_action"] not in opts:
+                        mistake_records.append(rec)
+                    else:
+                        optimal_records.append(rec)
+
+                # Prioritize mistakes (up to 70% of batch) to focus gradients on errors
+                num_mistakes_to_take = min(len(mistake_records), int(self.examples_per_round * 0.7))
+                num_optimal_to_take = self.examples_per_round - num_mistakes_to_take
+
+                rng = random.Random(self.seed + r)
+                selected_mistakes = rng.sample(mistake_records, num_mistakes_to_take) if mistake_records else []
+                selected_optimal = rng.sample(optimal_records, min(num_optimal_to_take, len(optimal_records))) if optimal_records else []
+
+                round_records = selected_mistakes + selected_optimal
+                print(f"[{self.condition}] Round {r} Mistake Mining: {len(selected_mistakes)} blunders/suboptimal + {len(selected_optimal)} optimal positions (Total: {len(round_records)})")
 
             # Append new practice experiences to replay buffer (prevents catastrophic forgetting)
             cumulative_train.extend(round_records)

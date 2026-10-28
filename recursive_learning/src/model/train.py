@@ -34,16 +34,28 @@ if torch is not None:
             legal_mask: (7,) boolean mask
         """
 
-        def __init__(self, records: List[Dict[str, Any]]):
+        def __init__(self, records: List[Dict[str, Any]], augment_mirror: bool = False):
             self.records = records
+            self.augment_mirror = augment_mirror
 
         def __len__(self) -> int:
-            return len(self.records)
+            return 2 * len(self.records) if self.augment_mirror else len(self.records)
 
         def __getitem__(self, idx: int):
-            rec = self.records[idx]
+            if self.augment_mirror:
+                rec_idx = idx // 2
+                is_flipped = (idx % 2 == 1)
+            else:
+                rec_idx = idx
+                is_flipped = False
+
+            rec = self.records[rec_idx]
             grid = np.array(rec["grid"], dtype=np.int8)
             curr_player = rec["current_player"]
+
+            if is_flipped:
+                grid = np.fliplr(grid).copy()
+
             b = Connect4Board(grid, curr_player)
             x = b.to_tensor_encoding()
 
@@ -55,13 +67,17 @@ if torch is not None:
             # Build target distribution over optimal moves
             target = np.zeros(COLS, dtype=np.float32)
             if "target_distribution" in rec:
-                target = np.array(rec["target_distribution"], dtype=np.float32)
+                t = np.array(rec["target_distribution"], dtype=np.float32)
+                target = t[::-1].copy() if is_flipped else t
             elif "optimal_moves" in rec and len(rec["optimal_moves"]) > 0:
                 opts = rec["optimal_moves"]
                 for c in opts:
-                    target[c] = 1.0 / len(opts)
+                    mapped_c = (COLS - 1 - c) if is_flipped else c
+                    target[mapped_c] = 1.0 / len(opts)
             elif "chosen_action" in rec:
-                target[rec["chosen_action"]] = 1.0
+                act = rec["chosen_action"]
+                mapped_act = (COLS - 1 - act) if is_flipped else act
+                target[mapped_act] = 1.0
             else:
                 # Default uniform over legal moves
                 for c in legal:
@@ -201,12 +217,12 @@ if torch is not None:
             model = Connect4Net().to(device)
         optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
 
-        train_ds = Connect4TorchDataset(train_records)
+        train_ds = Connect4TorchDataset(train_records, augment_mirror=True)
         train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
 
         dev_loader = None
         if dev_records:
-            dev_ds = Connect4TorchDataset(dev_records)
+            dev_ds = Connect4TorchDataset(dev_records, augment_mirror=False)
             dev_loader = DataLoader(dev_ds, batch_size=batch_size, shuffle=False)
 
         history = {
