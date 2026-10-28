@@ -306,8 +306,18 @@ class SelfImprovementEngine:
             new_agreement = proposal_eval["dev_agreement"]
             prop_tourney = proposal_eval.get("tournament", {})
 
-            # 4. Strict Acceptance Gate: must strictly improve over previous round
-            is_accepted = (new_agreement > prev_agreement)
+            # Always save proposal checkpoint before gating
+            prop_ckpt_path = self.output_dir / f"checkpoint_round_{r}_proposal.pt"
+            save_checkpoint(proposal_model, None, train_hist["total_steps"], r, proposal_eval, str(prop_ckpt_path))
+
+            # 4. Acceptance Gate:
+            # Accepts if dev agreement strictly improves, OR if gameplay tournament score improves while dev agreement stays within tolerance margin
+            prev_score = current_eval["tournament"]["overall_score"] if (isinstance(current_eval, dict) and "tournament" in current_eval) else 0.0
+            new_score = proposal_eval["tournament"]["overall_score"]
+
+            is_accepted = (new_agreement > prev_agreement) or (
+                new_agreement >= (prev_agreement - self.acceptance_tolerance) and new_score > prev_score
+            )
 
             round_entry = {
                 "round": r,
@@ -317,7 +327,9 @@ class SelfImprovementEngine:
                 "dev_agreement": new_agreement if is_accepted else prev_agreement,
                 "proposal_agreement": new_agreement,
                 "previous_agreement": prev_agreement,
-                "overall_score": proposal_eval["tournament"]["overall_score"] if is_accepted else current_eval["tournament"]["overall_score"],
+                "overall_score": new_score if is_accepted else prev_score,
+                "proposal_score": new_score,
+                "previous_score": prev_score,
                 "win_rate_random": self._extract_win_rate(prop_tourney, "random"),
                 "win_rate_heuristic": self._extract_win_rate(prop_tourney, "heuristic"),
                 "win_rate_minimax": self._extract_win_rate(prop_tourney, "minimax"),

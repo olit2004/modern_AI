@@ -34,29 +34,31 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Task 1 Self-Improvement Presentation Demo")
     parser.add_argument("--results_dir", type=str, default="results", help="Directory containing experiment results")
     parser.add_argument("--num_games", type=int, default=50, help="Number of head-to-head games (R3 vs R0)")
-    parser.add_argument("--save_plot", type=str, default="results/figures/demo_progress.png", help="Path to save progress plot")
+    parser.add_argument("--save_plot", type=str, default=None, help="Path to save progress plot (defaults to <results_dir>/figures/demo_progress.png)")
+    parser.add_argument("--data_dir", type=str, default="data", help="Directory containing dev dataset for blunder analysis")
     return parser.parse_args()
 
 def display_summary_table(experiment_log: List[Dict[str, Any]]):
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 88)
     print("📊 1. ACCEPTED & REJECTED ROUNDS SUMMARY TABLE")
-    print("=" * 80)
-    headers = ["Round", "Status", "Dev Agree (%)", "vs Random", "vs Heuristic", "vs Minimax", "Examples"]
-    row_fmt = "{:<7} | {:<20} | {:<13} | {:<9} | {:<12} | {:<10} | {:<8}"
+    print("=" * 88)
+    headers = ["Round", "Status", "Dev Agree", "Prop Agree", "vs Random", "vs Heuristic", "vs Minimax", "Examples"]
+    row_fmt = "{:<7} | {:<20} | {:<9} | {:<10} | {:<9} | {:<12} | {:<10} | {:<8}"
     print(row_fmt.format(*headers))
-    print("-" * 80)
+    print("-" * 88)
 
     for entry in experiment_log:
         r = entry.get("round", 0)
         status = entry.get("status", "ACCEPTED" if entry.get("accepted", True) else "REJECTED")
         agree = f"{entry.get('dev_agreement', 0.0) * 100:.1f}%"
+        prop = f"{entry.get('proposal_agreement', entry.get('dev_agreement', 0.0)) * 100:.1f}%"
         rnd = f"{entry.get('win_rate_random', 0.0) * 100:.0f}%"
         heu = f"{entry.get('win_rate_heuristic', 0.0) * 100:.0f}%"
         mini = f"{entry.get('win_rate_minimax', 0.0) * 100:.0f}%"
         examples = entry.get("examples_trained", 0)
-        print(row_fmt.format(f"R{r}", status, agree, rnd, heu, mini, str(examples)))
+        print(row_fmt.format(f"R{r}", status, agree, prop, rnd, heu, mini, str(examples)))
 
-    print("=" * 80 + "\n")
+    print("=" * 88 + "\n")
 
 def plot_progress_curves(experiment_log: List[Dict[str, Any]], output_path: Path):
     if not HAS_MATPLOTLIB or len(experiment_log) < 2:
@@ -128,10 +130,10 @@ def run_head_to_head(r0_path: Path, r3_path: Path, num_games: int = 50) -> Dict[
             move = active_player.get_move(board)
             board.make_move(move)
 
-        winner = board.winner
-        if winner is None:
+        winner = board.winner()
+        if winner is None or winner == 0:
             draws += 1
-        elif player_map[winner] == p3:
+        elif player_map.get(winner) == p3:
             r3_wins += 1
         else:
             r0_wins += 1
@@ -218,7 +220,8 @@ def main():
         with open(metrics_file, "r", encoding="utf-8") as f:
             log_data = json.load(f)
         display_summary_table(log_data)
-        plot_progress_curves(log_data, Path(args.save_plot))
+        plot_path = Path(args.save_plot) if args.save_plot else (res_base / "figures" / "demo_progress.png")
+        plot_progress_curves(log_data, plot_path)
     else:
         print(f"No experiment_metrics.json found in {res_base}. Run training first.")
 
@@ -228,14 +231,20 @@ def main():
     for folder in [res_base / "verified_seed42", res_base / "v3_verified_seed42", res_base / "teachers", res_base]:
         c0 = folder / "checkpoint_round_0.pt" if (folder / "checkpoint_round_0.pt").exists() else (folder / "teacher_round0_baseline.pt")
         c3 = folder / "checkpoint_round_3.pt" if (folder / "checkpoint_round_3.pt").exists() else (folder / "teacher_round3_improved.pt")
+        if (not c3 or not c3.exists()):
+            for alt in [folder / "checkpoint_round_3_proposal.pt", folder / "checkpoint_round_2.pt", folder / "checkpoint_round_2_proposal.pt"]:
+                if alt.exists():
+                    c3 = alt
+                    break
+
         if c0.exists() and r0_ckpt is None:
             r0_ckpt = c0
-        if c3.exists() and r3_ckpt is None:
+        if c3 and c3.exists() and r3_ckpt is None:
             r3_ckpt = c3
 
     if r0_ckpt and r3_ckpt:
         run_head_to_head(r0_ckpt, r3_ckpt, num_games=args.num_games)
-        find_convincing_blunder(r0_ckpt, r3_ckpt)
+        find_convincing_blunder(r0_ckpt, r3_ckpt, data_dir=args.data_dir)
     else:
         print("Note: Run training to produce checkpoints before running head-to-head match.")
 

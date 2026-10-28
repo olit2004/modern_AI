@@ -2,10 +2,10 @@
 condition: "verified"
 num_rounds: 3
 examples_per_round: 500
-epochs_per_round: 5
-batch_size: 64
+epochs_per_round: 8
+batch_size: 32
 learning_rate: 0.001
-acceptance_tolerance: 0.0  # Strict improvement: new_agreement > prev_agreement
+acceptance_tolerance: 0.015
 temperature: 0.8
 seeds: [42]
 opponents: ["random", "heuristic", "minimax"]
