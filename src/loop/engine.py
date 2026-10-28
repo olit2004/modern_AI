@@ -48,7 +48,8 @@ class SelfImprovementEngine:
         epochs_per_round: int = 5,
         batch_size: int = 32,
         acceptance_tolerance: float = 0.02,
-        temperature: float = 0.8
+        temperature: float = 0.8,
+        learning_rate: float = 1e-3
     ):
         assert condition in ["v1_fixed", "v2_unverified", "v3_verified"], f"Unknown condition {condition}"
         self.condition = condition
@@ -63,6 +64,7 @@ class SelfImprovementEngine:
         self.batch_size = batch_size
         self.acceptance_tolerance = acceptance_tolerance
         self.temperature = temperature
+        self.learning_rate = learning_rate
 
         self.metrics_file = self.output_dir / "experiment_metrics.json"
         self.experiment_log: List[Dict[str, Any]] = self._load_existing_log()
@@ -182,6 +184,7 @@ class SelfImprovementEngine:
                 dev_records=dev_records,
                 epochs=self.epochs_per_round,
                 batch_size=self.batch_size,
+                lr=self.learning_rate,
                 seed=self.seed,
                 round_num=0
             )
@@ -259,18 +262,16 @@ class SelfImprovementEngine:
             round_diversity = compute_diversity(round_records)
 
             # 2. Train proposal model on collected examples
-            # Start from current accepted checkpoint
-            device = get_device()
-            proposal_model = Connect4Net().to(device)
-            proposal_model.load_state_dict(current_model.state_dict())
-
-            _, train_hist = train_model(
+            # Start from current accepted checkpoint weights
+            proposal_model, train_hist = train_model(
                 train_records=round_records,
                 dev_records=dev_records,
                 epochs=self.epochs_per_round,
                 batch_size=self.batch_size,
+                lr=self.learning_rate,
                 seed=self.seed + r,
-                round_num=r
+                round_num=r,
+                init_model=current_model
             )
 
             # 3. Evaluate proposal on dev set

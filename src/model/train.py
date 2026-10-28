@@ -185,7 +185,8 @@ if torch is not None:
         max_steps: Optional[int] = None,
         seed: int = 42,
         checkpoint_dir: Optional[str] = None,
-        round_num: int = 0
+        round_num: int = 0,
+        init_model: Optional[Connect4Net] = None
     ) -> Tuple[Connect4Net, Dict[str, Any]]:
         """
         Standardized training function with step tracking and dev validation.
@@ -193,7 +194,11 @@ if torch is not None:
         set_seed(seed)
         device = get_device()
 
-        model = Connect4Net().to(device)
+        if init_model is not None:
+            model = Connect4Net().to(device)
+            model.load_state_dict(init_model.state_dict())
+        else:
+            model = Connect4Net().to(device)
         optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
 
         train_ds = Connect4TorchDataset(train_records)

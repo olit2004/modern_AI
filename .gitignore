@@ -17,11 +17,8 @@ ENV/
 results/cache/
 
 # Experiment outputs & large model weights
-results/*
-!results/figures/
-!results/.gitkeep
-results/figures/*
-!results/figures/.gitkeep
+results/
+results*/
 
 # Solver binaries & compiled objects
 src/solver/cpp/pons/*.o

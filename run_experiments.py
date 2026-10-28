@@ -68,6 +68,7 @@ def main():
     batch_size = cfg.get("batch_size", 64)
     tolerance = cfg.get("acceptance_tolerance", 0.02)
     temp = cfg.get("temperature", 0.8)
+    lr = cfg.get("learning_rate", 1e-3)
 
     # Initialize Solver & Cache
     cache_path = out_base / "cache" / "solver_labels.sqlite"
@@ -94,7 +95,8 @@ def main():
                 epochs_per_round=epochs_per_round,
                 batch_size=batch_size,
                 acceptance_tolerance=tolerance,
-                temperature=temp
+                temperature=temp,
+                learning_rate=lr
             )
 
             round_logs = engine.run()

@@ -27,15 +27,10 @@ def plot_agreement_curves(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
     """Plot mean and stddev agreement per round for V1, V2, V3."""
     plt.figure(figsize=(8, 5))
 
-    color_map = {
-        "v1_fixed": "#7f8c8d",       # Gray
-        "v2_unverified": "#e74c3c",  # Red
-        "v3_verified": "#2ecc71"     # Emerald Green
-    }
-    label_map = {
-        "v1_fixed": "Version 1 (Fixed Baseline)",
-        "v2_unverified": "Version 2 (Unverified Practice)",
-        "v3_verified": "Version 3 (Solver-Verified Practice)"
+    style_map = {
+        "v1_fixed": {"color": "#7f8c8d", "linestyle": "--", "marker": "s", "label": "Version 1 (Fixed Baseline)"},
+        "v2_unverified": {"color": "#e74c3c", "linestyle": ":", "marker": "D", "label": "Version 2 (Unverified Practice)"},
+        "v3_verified": {"color": "#2ecc71", "linestyle": "-", "marker": "o", "label": "Version 3 (Solver-Verified Practice)"}
     }
 
     for cond, runs in all_runs.items():
@@ -57,8 +52,9 @@ def plot_agreement_curves(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
         mean_aggr = np.mean(arr, axis=0)
         std_aggr = np.std(arr, axis=0)
 
-        plt.plot(rounds, mean_aggr, marker="o", linewidth=2.2, label=label_map.get(cond, cond), color=color_map.get(cond, "blue"))
-        plt.fill_between(rounds, mean_aggr - std_aggr, mean_aggr + std_aggr, alpha=0.18, color=color_map.get(cond, "blue"))
+        s = style_map.get(cond, {"color": "blue", "linestyle": "-", "marker": "o", "label": cond})
+        plt.plot(rounds, mean_aggr, marker=s["marker"], linestyle=s["linestyle"], linewidth=2.2, label=s["label"], color=s["color"])
+        plt.fill_between(rounds, mean_aggr - std_aggr, mean_aggr + std_aggr, alpha=0.15, color=s["color"])
 
     plt.title("Connect-4: Optimal Action Agreement per Round", fontsize=14, fontweight="bold", pad=12)
     plt.xlabel("Practice Round", fontsize=12)
@@ -76,8 +72,11 @@ def plot_agreement_curves(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
 def plot_diversity(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
     """Plot diversity ratio per round to monitor exploration vs repetitive collapse."""
     plt.figure(figsize=(8, 5))
-    color_map = {"v1_fixed": "#7f8c8d", "v2_unverified": "#e74c3c", "v3_verified": "#2ecc71"}
-    label_map = {"v1_fixed": "V1 (Fixed)", "v2_unverified": "V2 (Unverified)", "v3_verified": "V3 (Verified)"}
+    style_map = {
+        "v1_fixed": {"color": "#7f8c8d", "linestyle": "--", "marker": "s", "label": "V1 (Fixed)"},
+        "v2_unverified": {"color": "#e74c3c", "linestyle": ":", "marker": "D", "label": "V2 (Unverified)"},
+        "v3_verified": {"color": "#2ecc71", "linestyle": "-", "marker": "o", "label": "V3 (Verified)"}
+    }
 
     for cond, runs in all_runs.items():
         if not runs:
@@ -95,7 +94,8 @@ def plot_diversity(all_runs: Dict[str, List[List[Dict]]], out_dir: Path):
         arr = np.array(div_matrix)
         mean_div = np.mean(arr, axis=0)
 
-        plt.plot(rounds, mean_div, marker="s", linestyle="--", linewidth=2, label=label_map.get(cond, cond), color=color_map.get(cond, "blue"))
+        s = style_map.get(cond, {"color": "blue", "linestyle": "-", "marker": "o", "label": cond})
+        plt.plot(rounds, mean_div, marker=s["marker"], linestyle=s["linestyle"], linewidth=2.2, label=s["label"], color=s["color"])
 
     plt.title("Training State Diversity (Unique Positions / Total)", fontsize=14, fontweight="bold", pad=12)
     plt.xlabel("Practice Round", fontsize=12)
