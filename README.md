@@ -9,7 +9,7 @@ This repository houses two self-contained research tracks investigating autonomo
 
 ---
 
-##  Repository Structure
+## Repository Structure
 
 ```
 .
@@ -23,19 +23,24 @@ This repository houses two self-contained research tracks investigating autonomo
 │   ├── run_experiments.py         # Main training and evaluation engine
 │   ├── src/                       # Core engine, solver wrapper, neural net, tournament eval
 │   └── tests/                     # Comprehensive test suite (game logic, dataset, solver, net)
-└── Qwen_student/                  # Track 2: Amharic Capability Distillation
-    ├── final_adapter/             # Trained 4-bit QLoRA adapter weights & tokenizer
-    ├── evaluation_prompts.csv     # 60 held-out evaluation prompts
-    ├── experiment_notes.txt       # Quantitative logs, training configs, qualitative observations
-    ├── experiment_summary.json    # Machine-readable experiment and evaluation metrics
-    ├── predictions_final.csv      # Model outputs on evaluation prompts
-    ├── student trainer.ipynb      # End-to-end training and inference notebook
-    └── training_data.csv          # Clean teacher-generated Amharic dataset (1,843 examples)
+├── Qwen_student/                  # Track 2: Amharic Capability Distillation
+│   ├── final_adapter/             # Trained 4-bit QLoRA adapter weights & tokenizer
+│   ├── evaluation_prompts.csv     # 60 held-out evaluation prompts
+│   ├── experiment_notes.txt       # Quantitative logs, training configs, qualitative observations
+│   ├── experiment_summary.json    # Machine-readable experiment and evaluation metrics
+│   ├── predictions_final.csv      # Model outputs on evaluation prompts
+│   ├── student trainer.ipynb      # End-to-end training and inference notebook
+│   └── training_data.csv          # Clean teacher-generated Amharic dataset (1,843 examples)
+└── combination/                   # Track 3: Recursive Self-Learning on Amharic Qwen Student
+    ├── data/                      # Training data and evaluation prompts
+    ├── recursive_amharic_qwen_colab.ipynb  # End-to-end Colab self-learning notebook
+    ├── verifier.py                # Linguistic referee module
+    └── README.md                  # Concise execution guide
 ```
 
 ---
 
-##  Track 1: Verified Recursive Self-Improvement (`recursive_learning/`)
+## Track 1: Verified Recursive Self-Improvement (`recursive_learning/`)
 
 ### Research Motivation
 Can a neural network autonomously self-improve through practice games without falling victim to self-referential policy collapse or catastrophic forgetting? In Connect-4—a strongly solved zero-sum game—we investigate how external solver verification prevents degradation and guides genuine capability gains.
@@ -75,7 +80,7 @@ python demo.py --results_dir results --num_games 50
 
 ---
 
-##  Track 2: Amharic Capability Distillation (`Qwen_student/`)
+## Track 2: Amharic Capability Distillation (`Qwen_student/`)
 
 ### Research Motivation
 Compact language models (~0.5B parameters) have minimal exposure to low-resource languages like Amharic (Ethiopic Ge'ez script) during pre-training. We distill instruction-following and generation capabilities from an advanced teacher model into a lightweight, deployable student.
@@ -103,7 +108,7 @@ Compact language models (~0.5B parameters) have minimal exposure to low-resource
 
 ---
 
-##  Running on Google Colab
+## Running on Google Colab
 
 To train or demo the Connect-4 self-improvement engine on a free Google Colab T4/V100 GPU:
 
