@@ -276,5 +276,21 @@ if torch is not None:
         return final_loss < 0.1
 
 else:
+    class Connect4TorchDataset:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("PyTorch is required for Connect4TorchDataset.")
+
+    def soft_cross_entropy_loss(*args, **kwargs):
+        raise ImportError("PyTorch is required.")
+
+    def train_model(*args, **kwargs):
+        raise ImportError("PyTorch is required.")
+
+    def save_checkpoint(*args, **kwargs):
+        raise ImportError("PyTorch is required.")
+
+    def load_checkpoint(*args, **kwargs):
+        raise ImportError("PyTorch is required.")
+
     def sanity_check_overfit() -> bool:
         return True

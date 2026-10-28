@@ -101,6 +101,7 @@ def run_tournament(
 
     return {
         "matchups": matchups,
+        "opponents": matchups,
         "total_games": total_games,
         "total_wins": total_wins,
         "total_draws": total_draws,

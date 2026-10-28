@@ -107,6 +107,14 @@ class SelfImprovementEngine:
             "tournament": tournament_metrics
         }
 
+    def _extract_win_rate(self, tourney_dict: Dict[str, Any], opponent_name_substr: str) -> float:
+        """Safely extracts win rate for an opponent substring from tournament dict."""
+        matchups = tourney_dict.get("matchups", tourney_dict.get("opponents", tourney_dict))
+        for name, stats in matchups.items():
+            if opponent_name_substr.lower() in str(name).lower() and isinstance(stats, dict):
+                return float(stats.get("win_rate", 0.0))
+        return 0.0
+
     def collect_self_play_positions(self, model: Connect4Net, num_target_positions: int) -> List[Dict[str, Any]]:
         """
         Let the model play against itself and fixed opponents to run into mistakes and real positions.
@@ -201,7 +209,7 @@ class SelfImprovementEngine:
             ckpt_path = self.output_dir / "checkpoint_round_0.pt"
             save_checkpoint(model, None, train_hist["total_steps"], 0, eval_res, str(ckpt_path))
 
-            tourney = eval_res["tournament"]["opponents"]
+            tourney = eval_res.get("tournament", {})
             r0_entry = {
                 "round": 0,
                 "condition": self.condition,
@@ -211,9 +219,9 @@ class SelfImprovementEngine:
                 "total_steps": train_hist["total_steps"],
                 "dev_agreement": eval_res["dev_agreement"],
                 "overall_score": eval_res["tournament"]["overall_score"],
-                "win_rate_random": tourney.get("Random", {}).get("win_rate", 0.0),
-                "win_rate_heuristic": tourney.get("Heuristic", {}).get("win_rate", 0.0),
-                "win_rate_minimax": tourney.get("Minimax_d2", {}).get("win_rate", 0.0),
+                "win_rate_random": self._extract_win_rate(tourney, "random"),
+                "win_rate_heuristic": self._extract_win_rate(tourney, "heuristic"),
+                "win_rate_minimax": self._extract_win_rate(tourney, "minimax"),
                 "checkpoint": str(ckpt_path),
                 "diversity": compute_diversity(cumulative_train)
             }
@@ -296,7 +304,7 @@ class SelfImprovementEngine:
             proposal_eval = self.evaluate_model(proposal_model, dev_records, round_num=r)
             prev_agreement = self.experiment_log[-1]["dev_agreement"]
             new_agreement = proposal_eval["dev_agreement"]
-            prop_tourney = proposal_eval["tournament"]["opponents"]
+            prop_tourney = proposal_eval.get("tournament", {})
 
             # 4. Strict Acceptance Gate: must strictly improve over previous round
             is_accepted = (new_agreement > prev_agreement)
@@ -310,9 +318,9 @@ class SelfImprovementEngine:
                 "proposal_agreement": new_agreement,
                 "previous_agreement": prev_agreement,
                 "overall_score": proposal_eval["tournament"]["overall_score"] if is_accepted else current_eval["tournament"]["overall_score"],
-                "win_rate_random": prop_tourney.get("Random", {}).get("win_rate", 0.0),
-                "win_rate_heuristic": prop_tourney.get("Heuristic", {}).get("win_rate", 0.0),
-                "win_rate_minimax": prop_tourney.get("Minimax_d2", {}).get("win_rate", 0.0),
+                "win_rate_random": self._extract_win_rate(prop_tourney, "random"),
+                "win_rate_heuristic": self._extract_win_rate(prop_tourney, "heuristic"),
+                "win_rate_minimax": self._extract_win_rate(prop_tourney, "minimax"),
                 "examples_trained": len(cumulative_train),
                 "total_steps": train_hist["total_steps"],
                 "diversity": round_diversity

@@ -8,8 +8,11 @@ import os
 import sys
 import argparse
 import json
-import pandas as pd
 from pathlib import Path
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
 from typing import Dict, Any, List
 
 from src.utils.platform import detect_platform, get_default_output_dir, load_config, set_seed
@@ -137,16 +140,26 @@ def main():
             all_summaries.append(summary_entry)
 
     # Compile unified results table
-    summary_df = pd.DataFrame(all_summaries)
     summary_csv = out_base / "summary_table.csv"
     summary_json = out_base / "summary_table.json"
 
-    summary_df.to_csv(summary_csv, index=False)
     with open(summary_json, "w", encoding="utf-8") as f:
         json.dump(all_summaries, f, indent=2)
 
-    print(f"\n{'='*60}\nEXPERIMENT COMPLETE. Summary Table:\n{'='*60}")
-    print(summary_df.to_string(index=False))
+    if pd is not None:
+        summary_df = pd.DataFrame(all_summaries)
+        summary_df.to_csv(summary_csv, index=False)
+        print(f"\n{'='*60}\nEXPERIMENT COMPLETE. Summary Table:\n{'='*60}")
+        print(summary_df.to_string(index=False))
+    else:
+        if all_summaries:
+            headers = list(all_summaries[0].keys())
+            with open(summary_csv, "w", encoding="utf-8") as f:
+                f.write(",".join(headers) + "\n")
+                for row in all_summaries:
+                    f.write(",".join(str(row.get(h, "")) for h in headers) + "\n")
+        print(f"\n{'='*60}\nEXPERIMENT COMPLETE. (Saved JSON to {summary_json})\n{'='*60}")
+
     print(f"\nSaved summary to: {summary_csv}")
 
 if __name__ == "__main__":
