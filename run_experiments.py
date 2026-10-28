@@ -29,6 +29,7 @@ def parse_args():
     parser.add_argument("--data_dir", type=str, default="data", help="Directory for datasets")
     parser.add_argument("--prepare_data", action="store_true", help="Generate and split dataset if missing")
     parser.add_argument("--final", action="store_true", help="Authorize evaluation on locked final test set")
+    parser.add_argument("--clean", action="store_true", help="Wipe existing results directory and start fresh")
     return parser.parse_args()
 
 def ensure_datasets(data_dir: Path, solver: Connect4Solver, seed: int = 42):
@@ -55,6 +56,12 @@ def main():
         out_base = Path(args.out)
     else:
         out_base = get_default_output_dir(base_name="results")
+
+    if args.clean and out_base.exists():
+        print(f"[Clean] Removing previous results at {out_base.resolve()}...")
+        import shutil
+        shutil.rmtree(out_base)
+
     out_base.mkdir(parents=True, exist_ok=True)
     print(f"[Output] Results will be written to: {out_base.resolve()}")
 
